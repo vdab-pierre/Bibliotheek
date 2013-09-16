@@ -31,11 +31,11 @@
         </td>
         
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id })
+            @Html.ActionLink("Edit", "Edit","Boek", new { id=item.Id },null) |
+            @Html.ActionLink("Details", "Details","Boek", new { id=item.Id },null)
             @if(item.Exemplaren.Count()!=0){
                 @:|
-                @Html.ActionLink("Wis alle exemplaren", "WisAlleExemplarenVanBoek", new { id=item.Id })
+                @Html.ActionLink("Wis alle exemplaren", "WisAlleExemplarenVanBoek","Boek", new { id=item.Id },null)
             }
         </td>
     </tr>

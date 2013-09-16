@@ -38,48 +38,12 @@ namespace MvcBibTests.Controllers
             return View(boeken);
         }
         
-        public ActionResult Edit(int id) {
-            var boek = _db.Boeken.Find(id);
-            if (boek != null)
-            {
-                return View(boek);
-            }
-
-            return RedirectToAction("Index");
-        }
+        
 
 
-        [HttpPost]
-        public ActionResult Edit(Boek boek) {
-            if(ModelState.IsValid){
-                _db.Entry(boek).State=EntityState.Modified;
-                _db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(boek);
-        }
+        
 
-        public ActionResult Details(int id) {
-            var boek = _db.Boeken.Where(b => b.Id == id).SingleOrDefault();
-            if (boek != null)
-            {
-                return View(boek);
-            }
-            
-            return RedirectToAction("Index");
-            
-        }
-
-        public ActionResult WisAlleExemplarenVanBoek(int id)
-        {
-            var boek = _db.Boeken.Find(id);
-            if (boek != null)
-            {
-                return View(boek);
-            }
-
-            return RedirectToAction("Index");
-        }
+        
 
         [HttpPost]
         public ActionResult WisExemplaar(int boekId,int exId) {
@@ -110,8 +74,11 @@ namespace MvcBibTests.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            _db.Dispose();
             base.Dispose(disposing);
+            if (disposing)
+            {
+                _db.Dispose();
+            }
         }
     }
 }
