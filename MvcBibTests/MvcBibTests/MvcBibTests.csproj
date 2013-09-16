@@ -39,8 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bibliotheek.Domain">
-      <HintPath>..\..\Bibliotheek\Bibliotheek.Domain\bin\Debug\Bibliotheek.Domain.dll</HintPath>
+    <Reference Include="Bibliotheek.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bibliotheek.Domain\bin\Debug\Bibliotheek.Domain.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
