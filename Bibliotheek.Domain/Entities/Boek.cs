@@ -8,8 +8,6 @@ namespace Bibliotheek.Domain.Entities
 {
     public class Boek
     {
-        //blah
-        //nogis blah
         public int Id { get; set; }
         public string Isbn { get; set; }
         public string Titel { get; set; }
