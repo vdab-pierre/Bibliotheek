@@ -1,0 +1,56 @@
+﻿@model Bibliotheek.Domain.Entities.Boek
+
+@{
+    ViewBag.Title = "NewBoek";
+}
+
+<h2>NewBoek</h2>
+
+@using (Html.BeginForm("CreateBoekOrExemplaar","Boek",null,FormMethod.Post)) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Boek</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Isbn)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Isbn)
+            @Html.ValidationMessageFor(model => model.Isbn)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Titel)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Titel)
+            @Html.ValidationMessageFor(model => model.Titel)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Samenvatting)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Samenvatting)
+            @Html.ValidationMessageFor(model => model.Samenvatting)
+        </div>
+
+        <div class="editor-field">
+            <label>Aantal exemplaren:<input type="number" name="aantalEx" /></label>
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

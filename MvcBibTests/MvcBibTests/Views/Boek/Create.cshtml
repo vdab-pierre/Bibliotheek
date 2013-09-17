@@ -1,0 +1,24 @@
+﻿
+
+@{
+    ViewBag.Title = "Geef isbn";
+}
+
+<h2>Nieuw boek</h2>
+
+@using (Html.BeginForm("CreateOrLookUp","Boek",null,FormMethod.Get)) {
+    
+    @Html.ValidationSummary(true)
+
+    <label>Tik of scan een isbn: <input type="text" name="isbn" /></label>
+    <input type="submit" value="Create" />
+    
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index","Home")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
