@@ -37,13 +37,6 @@ namespace MvcBibTests.Controllers
 
             return View(boeken);
         }
-        
-        
-
-
-        
-
-        
 
         [HttpPost]
         public ActionResult WisExemplaar(int boekId,int exId) {

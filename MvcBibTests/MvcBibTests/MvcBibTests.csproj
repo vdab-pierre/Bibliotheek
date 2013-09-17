@@ -39,6 +39,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Bibliotheek.Abstract, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bibliotheek.Abstract\bin\Debug\Bibliotheek.Abstract.dll</HintPath>
+    </Reference>
     <Reference Include="Bibliotheek.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bibliotheek.Domain\bin\Debug\Bibliotheek.Domain.dll</HintPath>
@@ -187,6 +191,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BoekController.cs" />
+    <Compile Include="Controllers\BrolController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -319,6 +324,8 @@
     <Content Include="Views\Shared\_BoekLijst.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Boek\WisAlleExemplarenVanBoek.cshtml" />
+    <Content Include="Views\Boek\ExemplarenVanBoek.cshtml" />
+    <Content Include="Views\Boek\WisExemplaarVanBoek.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

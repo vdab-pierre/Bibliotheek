@@ -69,6 +69,32 @@ namespace MvcBibTests.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost, ActionName("WisAlleExemplarenVanBoek")]
+        [ValidateAntiForgeryToken]
+        public ActionResult WisAlleExemplarenVanBoekConfirmed(int id) {
+            Boek boek = _db.Boeken.Find(id);
+            var exemplaren = boek.Exemplaren;
+            boek.Exemplaren = null;
+            foreach(var ex in exemplaren){
+                _db.Exemplaren.Remove(ex);
+                _db.SaveChanges();
+            }
+            return RedirectToAction("Index","Home");
+        }
+
+        public ActionResult ExemplarenVanBoek(int id) {
+            Boek boek = _db.Boeken.Find(id);
+            return View(boek);
+        }
+
+        public ActionResult WisExemplaarVanBoek(int exId) {
+            var exemplaar = _db.Exemplaren.Find(exId);
+            if (exemplaar != null) {
+                return View(exemplaar);
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
