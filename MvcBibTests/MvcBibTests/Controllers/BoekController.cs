@@ -115,9 +115,9 @@ namespace MvcBibTests.Controllers
         
         public ActionResult CreateOrLookUp(string isbn)
         {
-            //boek bestaat in de db
-            // boek opzoeken
-            // boekinfo uit db weergeven, vragen hoeveel exemplaren toevoegen
+            //boek bestaat in de db*
+            // boek opzoeken*
+            // boekinfo uit db weergeven, vragen hoeveel exemplaren en ze toevoegen*
 
             // bestaat niet in db
             // zoeken op het net
@@ -140,7 +140,11 @@ namespace MvcBibTests.Controllers
                 return View("NewBoek", boek);
             }
             else { 
+                //boek bestaat niet in db
                 // op isbndb.org zoeken
+
+
+                //boek niet op het net gevonden
             }
         
         
