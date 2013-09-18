@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bibliotheek.Abstract", "Bib
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bibliotheek.Domain", "Bibliotheek.Domain\Bibliotheek.Domain.csproj", "{732A2C47-4081-495E-94C6-9EDDAAE562ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcBibTests", "MvcBibTests\MvcBibTests\MvcBibTests.csproj", "{A7594CAD-A371-4C3E-914C-18D7A1B28B0F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcBib", "MvcBib\MvcBib\MvcBib.csproj", "{A7594CAD-A371-4C3E-914C-18D7A1B28B0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
