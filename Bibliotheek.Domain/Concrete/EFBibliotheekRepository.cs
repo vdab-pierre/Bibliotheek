@@ -24,6 +24,7 @@ namespace Bibliotheek.Domain.Concrete
         public DbSet<Etiket> Etiketten { get; set; }
         public DbSet<Exemplaar> Exemplaren { get; set; }
         public DbSet<Uitlening> Uitleningen { get; set; }
+        public DbSet<Isbn> Isbns { get; set; }
 
         public IQueryable<T> Query<T>() where T : class
         {

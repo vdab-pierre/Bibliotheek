@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bibliotheek.Domain", "Bibli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcBib", "MvcBib\MvcBib\MvcBib.csproj", "{A7594CAD-A371-4C3E-914C-18D7A1B28B0F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebBibUnitTests", "WebBibUnitTests\WebBibUnitTests.csproj", "{51680705-3E51-4C3B-861A-6F0A005CA4CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{A7594CAD-A371-4C3E-914C-18D7A1B28B0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7594CAD-A371-4C3E-914C-18D7A1B28B0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7594CAD-A371-4C3E-914C-18D7A1B28B0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51680705-3E51-4C3B-861A-6F0A005CA4CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51680705-3E51-4C3B-861A-6F0A005CA4CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51680705-3E51-4C3B-861A-6F0A005CA4CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51680705-3E51-4C3B-861A-6F0A005CA4CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

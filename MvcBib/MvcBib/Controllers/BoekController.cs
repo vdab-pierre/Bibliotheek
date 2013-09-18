@@ -113,7 +113,7 @@ namespace MvcBib.Controllers
 
         
         
-        public ActionResult CreateOrLookUp(string isbn)
+        public ActionResult CreateOrLookUp(Isbn isbn)
         {
             //boek bestaat in de db*
             // boek opzoeken*
@@ -125,31 +125,28 @@ namespace MvcBib.Controllers
 
             //   niet gevonden: lege boekvelden laten invullen, # exemplaren, toevoegen
 
-            if (string.IsNullOrEmpty(isbn))
+            
+            if (ModelState.IsValid)
             {
-                return View("Create");
-            }
-            //correct isbn?
-            //else if() { 
-                
-            //}
-            var boek = _db.Boeken.Where(b => b.Isbn == isbn).FirstOrDefault();
+                var boekInDb = _db.Boeken.Where(b => b.Isbn.Nummer == isbn.Nummer).FirstOrDefault();
 
-            if (boek != null)
-            {
-                return View("NewBoek", boek);
-            }
-            else { 
-                //boek bestaat niet in db
-                // op isbndb.org zoeken
+                if (boekInDb != null)
+                {
+                    return View("NewBoek", boekInDb);
+                }
+                else
+                {
+                    //boek bestaat niet in db
+                    // op isbndb.org zoeken
 
 
-                //boek niet op het net gevonden
+                    //boek niet op het net gevonden
+                }
             }
         
         
 
-            return View();
+            return View("Create",isbn);
         }
 
 
@@ -158,14 +155,16 @@ namespace MvcBib.Controllers
             //anders nieuw boek aanmaken
             
             if (boek != null) {
-                var boekInDb = _db.Boeken.Where(b => b.Isbn == boek.Isbn).FirstOrDefault();
+                var boekInDb = _db.Boeken.Where(b => b.Isbn.Nummer == boek.Isbn.Nummer).FirstOrDefault();
                 if (boekInDb != null)
                 {
+                    //boek gevonden in db
                     //exemplaren toevoegen aan bestaand boek
                     ExemplarenToevoegen(boekInDb, aantalEx);
                     return RedirectToAction("Index", "Home");
                 }
                 else { 
+                    //boek niet gevonden in db
                     //nieuw boek maken en exemplaren eraan toevoegen
                     if (ModelState.IsValid)
                     {

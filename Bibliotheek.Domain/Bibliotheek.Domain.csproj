@@ -35,6 +35,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
@@ -51,24 +52,18 @@
     <Compile Include="Entities\Boek.cs" />
     <Compile Include="Entities\Etiket.cs" />
     <Compile Include="Entities\Exemplaar.cs" />
+    <Compile Include="Entities\Isbn.cs" />
+    <Compile Include="Entities\IsIsbnAttribute.cs" />
     <Compile Include="Entities\Uitgever.cs" />
     <Compile Include="Entities\Uitlening.cs" />
-    <Compile Include="Migrations\201309160855203_recup.cs" />
-    <Compile Include="Migrations\201309160855203_recup.Designer.cs">
-      <DependentUpon>201309160855203_recup.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\WebZoekBoek.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="doc\BibDomein.docx" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201309160855203_recup.resx">
-      <DependentUpon>201309160855203_recup.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bibliotheek.Abstract\Bibliotheek.Abstract.csproj">

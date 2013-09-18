@@ -1,4 +1,4 @@
-﻿
+﻿@model Bibliotheek.Domain.Entities.Isbn
 
 @{
     ViewBag.Title = "Geef isbn";
@@ -10,7 +10,10 @@
     
     @Html.ValidationSummary(true)
 
-    <label>Tik of scan een isbn: <input type="text" name="isbn" /></label>
+    
+    @Html.EditorFor(m=>m.Nummer)
+
+    @*<label>Tik of scan een isbn: <input type="text" name="isbn" /></label>*@
     <input type="submit" value="Create" />
     
 }
