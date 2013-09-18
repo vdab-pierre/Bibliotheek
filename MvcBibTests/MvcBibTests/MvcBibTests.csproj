@@ -43,8 +43,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bibliotheek.Abstract\bin\Debug\Bibliotheek.Abstract.dll</HintPath>
     </Reference>
-    <Reference Include="Bibliotheek.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Bibliotheek.Domain">
       <HintPath>..\..\Bibliotheek.Domain\bin\Debug\Bibliotheek.Domain.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
