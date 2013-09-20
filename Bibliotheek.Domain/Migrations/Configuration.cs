@@ -17,10 +17,10 @@ namespace Bibliotheek.Domain.Migrations
         protected override void Seed(Bibliotheek.Domain.Concrete.EFBibliotheekRepository context)
         {
 
-            Auteur julia = new Auteur { Familienaam = "Lerman", Voornaam = "Julia" };
-            Auteur adam = new Auteur { Familienaam = "Freeman", Voornaam = "Adam" };
-            Auteur henry = new Auteur { Familienaam = "Lee", Voornaam = "Henry" };
-            Auteur eugene = new Auteur { Familienaam = "Chuvyrov", Voornaam = "Eugene" };
+            Auteur julia = new Auteur { Naam= "Lerman Julia" };
+            Auteur adam = new Auteur { Naam = "Freeman Adam" };
+            Auteur henry = new Auteur { Naam = "Lee Henry" };
+            Auteur eugene = new Auteur { Naam = "Chuvyrov Eugene" };
 
             Uitgever apress = new Uitgever { Naam = "Apress" };
             Uitgever oreilly = new Uitgever { Naam = "O'Reilly" };

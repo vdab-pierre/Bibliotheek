@@ -9,8 +9,7 @@ namespace Bibliotheek.Domain.Entities
     public partial class Auteur
     {
         public int Id { get; set; }
-        public string Voornaam { get; set; }
-        public string Familienaam { get; set; }
+        public string Naam { get; set; }
         public string author_id { get; set; }
         public virtual ICollection<Boek> Boeken { get; set; }
     }
