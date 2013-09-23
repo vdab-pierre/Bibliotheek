@@ -17,16 +17,16 @@ namespace Bibliotheek.Domain.Migrations
         protected override void Seed(Bibliotheek.Domain.Concrete.EFBibliotheekRepository context)
         {
 
-            Auteur julia = new Auteur { Naam= "Lerman Julia" };
-            Auteur adam = new Auteur { Naam = "Freeman Adam" };
-            Auteur henry = new Auteur { Naam = "Lee Henry" };
-            Auteur eugene = new Auteur { Naam = "Chuvyrov Eugene" };
+            Auteur julia = new Auteur { Familienaam= "Lerman",Voornaam="Julia" };
+            Auteur adam = new Auteur { Familienaam = "Freeman",Voornaam="Adam" };
+            Auteur henry = new Auteur { Familienaam = "Lee",Voornaam="Henry" };
+            Auteur eugene = new Auteur { Familienaam = "Chuvyrov",Voornaam="Eugene" };
 
             Uitgever apress = new Uitgever { Naam = "Apress" };
             Uitgever oreilly = new Uitgever { Naam = "O'Reilly" };
 
             Isbn efIsbn = new Isbn { Nummer = "9780596807269" };
-            Isbn mvc4Isbn = new Isbn { Nummer = "9781430242469" };
+            Isbn mvc4Isbn = new Isbn { Nummer = "9781430242369" };
             Isbn wpIsbn = new Isbn { Nummer = "9781430241348" };
 
             Boek ef = new Boek

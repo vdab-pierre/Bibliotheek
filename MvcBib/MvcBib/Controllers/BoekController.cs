@@ -139,9 +139,15 @@ namespace MvcBib.Controllers
                 {
                     //boek bestaat niet in db
                     // op isbndb.org zoeken
-                    
-
+                    var webBoek = WebZoekBoek.ZoekBoek(isbn);
+                    if (webBoek != null) {
+                        _db.Boeken.Add(webBoek);
+                        _db.SaveChanges();
+                        return View("NewBoek",webBoek);
+                    }
                     //boek niet op het net gevonden
+                    var leegBoek = new Boek();
+                    return View("NewBoek", leegBoek);
                 }
             }
         

@@ -29,10 +29,10 @@ namespace MvcBib.Controllers
                          where 
                          searchTerm==null
                          || a.Familienaam.StartsWith(searchTerm)
+                         || a.Voornaam.StartsWith(searchTerm)
                          || b.Titel.Contains(searchTerm)
                          || b.Isbn.Nummer.StartsWith(searchTerm)
                          || b.Uitgever.Naam.StartsWith(searchTerm)
-                         || a.Voornaam.StartsWith(searchTerm)
                          select b).ToList();
 
             return View(boeken);
