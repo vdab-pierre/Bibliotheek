@@ -1,4 +1,4 @@
-﻿@model Bibliotheek.Domain.Entities.Auteur
+﻿@model MvcBib.Models.BoekAuteurViewModel
 
 @{
     ViewBag.Title = "CreateVoorBoek";
@@ -11,22 +11,22 @@
     @Html.ValidationSummary(true)
     
     <fieldset>
-        <legend>Nieuwe auteur</legend>
+        <legend>Create auteur voor boek: @Model.Boek.Titel</legend>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Voornaam)
+            @Html.LabelFor(model => model.Auteur.Voornaam)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Voornaam)
-            @Html.ValidationMessageFor(model => model.Voornaam)
+            @Html.EditorFor(model => model.Auteur.Voornaam)
+            @Html.ValidationMessageFor(model => model.Auteur.Voornaam)
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Familienaam)
+            @Html.LabelFor(model => model.Auteur.Familienaam)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Familienaam)
-            @Html.ValidationMessageFor(model => model.Familienaam)
+            @Html.EditorFor(model => model.Auteur.Familienaam)
+            @Html.ValidationMessageFor(model => model.Auteur.Familienaam)
         </div>
 
         
