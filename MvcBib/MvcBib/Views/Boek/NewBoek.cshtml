@@ -41,16 +41,19 @@
         </div>
         
             @if(Model.Auteurs.LongCount()>0){
-                
-                foreach (var a in Model.Auteurs) { 
-                    @Html.EditorFor(model => a.Familienaam)
-                    @Html.ValidationMessageFor(model => a.Familienaam)
-                    @Html.EditorFor(model => a.Voornaam)
-                    @Html.ValidationMessageFor(model => a.Voornaam)
-                }
+                <div id="auteurs">
+                    @foreach (var a in Model.Auteurs) { 
+                        @Html.DisplayFor(model => a.Familienaam) @:&nbsp;
+                        @Html.DisplayFor(model => a.Voornaam)
+                        
+                    }
+                </div>
                 
             }else{
-                <p>Nog geen auteurs, die kan je achteraf toevoegen.</p>
+                <div id="auteurs">
+                    <p>Nog geen auteurs in de db.</p>
+                </div>
+                <a href="#" onclick="addNew()">Toevoegen.</a>
             }
         <div class="editor-label">
             @Html.LabelFor(model => model.Uitgever)
@@ -77,6 +80,10 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
+        function addNew() {
+            $("#auteurs")
+        }
+
 
         @*function addOrCreateAuteur() {
             var data = {
