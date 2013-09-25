@@ -10,25 +10,44 @@
     <legend>Boek</legend>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.Isbn)
+         @Html.LabelFor(model => model.Isbn)
     </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Isbn)
+        @Html.DisplayFor(model => model.Isbn.Nummer)
     </div>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.Titel)
+         @Html.LabelFor(model => model.Titel)
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Titel)
     </div>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.Samenvatting)
+         @Html.LabelFor(model => model.Samenvatting)
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Samenvatting)
     </div>
+    <div class="display-label">
+         @Html.LabelFor(model => model.Uitgever)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Uitgever.Naam)
+    </div>
+    <div class="display-label">
+            @Html.LabelFor(model => model.Auteurs)
+    </div>
+     @if(Model.Auteurs.LongCount()>0){
+                
+                foreach (var a in Model.Auteurs) { 
+                    @Html.DisplayFor(model => a.Familienaam)
+                    @Html.DisplayFor(model => a.Voornaam)
+                }
+                
+            }else{
+                <p>Nog geen auteurs.</p>
+            }
 </fieldset>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |

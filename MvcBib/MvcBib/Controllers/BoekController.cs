@@ -147,6 +147,9 @@ namespace MvcBib.Controllers
                     }
                     //boek niet op het net gevonden
                     var leegBoek = new Boek();
+                    leegBoek.Isbn = isbn;
+                    leegBoek.Auteurs = new HashSet<Auteur>();
+                    leegBoek.Uitgever = new Uitgever();
                     return View("NewBoek", leegBoek);
                 }
             }
@@ -175,10 +178,20 @@ namespace MvcBib.Controllers
                     //nieuw boek maken en exemplaren eraan toevoegen
                     if (ModelState.IsValid)
                     {
+                        var uitgeverInDb = _db.Uitgevers.Where(u => u.Naam.Contains(boek.Uitgever.Naam)).FirstOrDefault();
+                        if (uitgeverInDb != null) {
+                            boek.Uitgever = uitgeverInDb;
+                        }
                         _db.Boeken.Add(boek);
                         _db.SaveChanges();
                         ExemplarenToevoegen(boek, aantalEx);
-                        return RedirectToAction("Index", "Home");
+                        boek.Auteurs = new HashSet<Auteur>();
+                        if(boek.Auteurs.LongCount()!=0){
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else{
+                            return RedirectToAction("CreateVoorBoek", "Auteur", new { boekId = boek.Id });
+                        }
                     }
                 }
             }
@@ -186,11 +199,15 @@ namespace MvcBib.Controllers
         }
 
         private void ExemplarenToevoegen(Boek boek, int aantalEx) {
-            for (int i = 0; i < aantalEx; i++)
+            if (boek != null)
             {
-                Exemplaar ex = new Exemplaar { Commentaar = "ex" + (i + 1)};
-                boek.Exemplaren.Add(ex);
-                _db.SaveChanges();
+                for (int i = 0; i < aantalEx; i++)
+                {
+                    Exemplaar ex = new Exemplaar { Commentaar = "ex" + (i + 1) };
+                    boek.Exemplaren = new HashSet<Exemplaar>();
+                    boek.Exemplaren.Add(ex);
+                    _db.SaveChanges();
+                }
             }
         }
 

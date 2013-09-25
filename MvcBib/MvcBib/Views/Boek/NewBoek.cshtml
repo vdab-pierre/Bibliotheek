@@ -14,11 +14,11 @@
         <legend>Boek</legend>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Isbn)
+            @Html.LabelFor(model => model.Isbn.Nummer)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Isbn)
-            @Html.ValidationMessageFor(model => model.Isbn)
+            @Html.EditorFor(model => model.Isbn.Nummer)
+            @Html.ValidationMessageFor(model => model.Isbn.Nummer)
         </div>
 
         <div class="editor-label">
@@ -36,9 +36,32 @@
             @Html.EditorFor(model => model.Samenvatting)
             @Html.ValidationMessageFor(model => model.Samenvatting)
         </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Auteurs)
+        </div>
+        
+            @if(Model.Auteurs.LongCount()>0){
+                
+                foreach (var a in Model.Auteurs) { 
+                    @Html.EditorFor(model => a.Familienaam)
+                    @Html.ValidationMessageFor(model => a.Familienaam)
+                    @Html.EditorFor(model => a.Voornaam)
+                    @Html.ValidationMessageFor(model => a.Voornaam)
+                }
+                
+            }else{
+                <p>Nog geen auteurs, die kan je achteraf toevoegen.</p>
+            }
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Uitgever)
+        </div>
+        <div class="editor-label">
+            @Html.EditorFor(model => model.Uitgever.Naam)
+            @Html.ValidationMessageFor(model => model.Uitgever.Naam)
+        </div>
 
         <div class="editor-field">
-            <label>Aantal exemplaren:<input type="number" name="aantalEx" /></label>
+            <label for="aantalEx">Aantal exemplaren:</label><input type="number" name="aantalEx" id="aantalEx" />
         </div>
 
         <p>
@@ -53,4 +76,24 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+
+        @*function addOrCreateAuteur() {
+            var data = {
+                Boek: '@Model',
+                Voornaam: $('#Voornaam').val(),
+                FamilieNaam: $('#Familienaam').val()
+                
+            };
+            //alert(JSON.stringify(data));
+            $.ajax({
+                url: '@Url.Action("AddOrCreate","Auteur")',
+                type: 'POST',
+                data:{"strJson": "'" + JSON.stringify(data) + "'"},
+                success: function (result) {
+                    alert(result);
+                }
+            });
+        }*@
+    </script>
 }

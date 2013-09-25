@@ -49,87 +49,96 @@ namespace Bibliotheek.Domain.Utility
             
 
             JObject jsonBoek = JObject.Parse(strJsonBoek);
-
-            string jsonBoekTitel = (string)jsonBoek["data"][0]["title"];
-            string jsonBoekSummary = (string)jsonBoek["data"][0]["summary"];
-            string jsonBoekPublisherName = (string)jsonBoek["data"][0]["publisher_name"];
-            string[] jsonBoekAuthor_ids = new string[jsonBoek["data"][0]["author_data"].LongCount()];
-
-            Boek hetBoek = new Boek
+            if (jsonBoek["error"] != null)
             {
-                Isbn = isbn,
-                Titel=jsonBoekTitel,
-                Samenvatting=jsonBoekSummary,                
-            };
-
-            //auteurs
-            for(var i=0;i<jsonBoek["data"][0]["author_data"].LongCount();i++) {
-                jsonBoekAuthor_ids[i] = (string)jsonBoek["data"][0]["author_data"][i]["id"];
+                return null;
             }
-
-            string[,] jsonBoekAuteurNames = new string[jsonBoek["data"][0]["author_data"].LongCount(),2];
-            for(var i=0;i<jsonBoekAuthor_ids.LongCount();i++)
-            { 
-                //auteur zoek op isbndb
-                
-                string urlAuteur = System.Configuration.ConfigurationManager.AppSettings["isbndb_url_auteur"] + jsonBoekAuthor_ids[i];
-                request = (HttpWebRequest)WebRequest.Create(urlAuteur);
-                string strJsonAuteur;
-                try
-                {
-                    WebResponse response = request.GetResponse();
-                    using (Stream responseStream = response.GetResponseStream())
-                    {
-                        StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                        strJsonAuteur = reader.ReadToEnd();
-                    }
-                }
-
-                catch (WebException ex)
-                {
-                    WebResponse errorResponse = ex.Response;
-                    string errorText;
-                    using (Stream responseStream = errorResponse.GetResponseStream())
-                    {
-                        StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                        errorText = reader.ReadToEnd();
-                    }
-                    throw new Exception(errorText);
-                }
-                JObject jsonAuteur = JObject.Parse(strJsonAuteur);
-                jsonBoekAuteurNames[i, 0] = (string)jsonAuteur["data"][0]["last_name"];
-                jsonBoekAuteurNames[i, 1] = (string)jsonAuteur["data"][0]["first_name"];
-            }
-
-
-            using (var ctx = new EFBibliotheekRepository())
+            else
             {
-                //auteurs toevoegen aan boek
-                for (var i = 0; i < jsonBoekAuteurNames.GetLength(0); i++)
+                string jsonBoekTitel = (string)jsonBoek["data"][0]["title"];
+                string jsonBoekSummary = (string)jsonBoek["data"][0]["summary"];
+                string jsonBoekPublisherName = (string)jsonBoek["data"][0]["publisher_name"];
+                string[] jsonBoekAuthor_ids = new string[jsonBoek["data"][0]["author_data"].LongCount()];
+
+                Boek hetBoek = new Boek
                 {
-                    string famNaam = jsonBoekAuteurNames[i, 0];
-                    string voorNaam = jsonBoekAuteurNames[i, 1];
-                    var deAuteurInDb = ctx.Auteurs.Where(a => a.Familienaam.Contains(famNaam) && a.Voornaam.Contains(voorNaam)).FirstOrDefault();
-                    if (deAuteurInDb != null)
+                    Isbn = isbn,
+                    Titel = jsonBoekTitel,
+                    Samenvatting = jsonBoekSummary,
+                };
+
+                //auteurs
+                for (var i = 0; i < jsonBoek["data"][0]["author_data"].LongCount(); i++)
+                {
+                    jsonBoekAuthor_ids[i] = (string)jsonBoek["data"][0]["author_data"][i]["id"];
+                }
+
+                string[,] jsonBoekAuteurNames = new string[jsonBoek["data"][0]["author_data"].LongCount(), 2];
+                for (var i = 0; i < jsonBoekAuthor_ids.LongCount(); i++)
+                {
+                    //auteur zoek op isbndb
+
+                    string urlAuteur = System.Configuration.ConfigurationManager.AppSettings["isbndb_url_auteur"] + jsonBoekAuthor_ids[i];
+                    request = (HttpWebRequest)WebRequest.Create(urlAuteur);
+                    string strJsonAuteur;
+                    try
                     {
-                        hetBoek.Auteurs.Add(deAuteurInDb);
+                        WebResponse response = request.GetResponse();
+                        using (Stream responseStream = response.GetResponseStream())
+                        {
+                            StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                            strJsonAuteur = reader.ReadToEnd();
+                        }
                     }
-                    else {
-                        hetBoek.Auteurs = new HashSet<Auteur>();
-                        hetBoek.Auteurs.Add(new Auteur { Familienaam = famNaam, Voornaam = famNaam });
+
+                    catch (WebException ex)
+                    {
+                        WebResponse errorResponse = ex.Response;
+                        string errorText;
+                        using (Stream responseStream = errorResponse.GetResponseStream())
+                        {
+                            StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                            errorText = reader.ReadToEnd();
+                        }
+                        throw new Exception(errorText);
                     }
+                    JObject jsonAuteur = JObject.Parse(strJsonAuteur);
+                    jsonBoekAuteurNames[i, 0] = (string)jsonAuteur["data"][0]["last_name"];
+                    jsonBoekAuteurNames[i, 1] = (string)jsonAuteur["data"][0]["first_name"];
                 }
-                //uitgever toevoegen aan boek
-                var deUitgeverInDb = ctx.Uitgevers.Where(u => u.Naam.Contains(jsonBoekPublisherName)).FirstOrDefault();
-                if (deUitgeverInDb != null)
+
+
+                using (var ctx = new EFBibliotheekRepository())
                 {
-                    hetBoek.Uitgever = deUitgeverInDb;
+                    //auteurs toevoegen aan boek
+                    for (var i = 0; i < jsonBoekAuteurNames.GetLength(0); i++)
+                    {
+                        string famNaam = jsonBoekAuteurNames[i, 0];
+                        string voorNaam = jsonBoekAuteurNames[i, 1];
+                        var deAuteurInDb = ctx.Auteurs.Where(a => a.Familienaam.Contains(famNaam) && a.Voornaam.Contains(voorNaam)).FirstOrDefault();
+                        if (deAuteurInDb != null)
+                        {
+                            hetBoek.Auteurs.Add(deAuteurInDb);
+                        }
+                        else
+                        {
+                            hetBoek.Auteurs = new HashSet<Auteur>();
+                            hetBoek.Auteurs.Add(new Auteur { Familienaam = famNaam, Voornaam = famNaam });
+                        }
+                    }
+                    //uitgever toevoegen aan boek
+                    var deUitgeverInDb = ctx.Uitgevers.Where(u => u.Naam.Contains(jsonBoekPublisherName)).FirstOrDefault();
+                    if (deUitgeverInDb != null)
+                    {
+                        hetBoek.Uitgever = deUitgeverInDb;
+                    }
+                    else
+                    {
+                        hetBoek.Uitgever = new Uitgever { Naam = jsonBoekPublisherName };
+                    }
                 }
-                else {
-                    hetBoek.Uitgever = new Uitgever { Naam = jsonBoekPublisherName };
-                }
+                return hetBoek;
             }
-            return hetBoek;
         }
     }
 }
