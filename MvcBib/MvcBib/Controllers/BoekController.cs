@@ -148,7 +148,7 @@ namespace MvcBib.Controllers
                     //boek niet op het net gevonden
                     var leegBoek = new Boek();
                     leegBoek.Isbn = isbn;
-                    leegBoek.Auteurs = new HashSet<Auteur>();
+                    
                     leegBoek.Uitgever = new Uitgever();
                     return View("NewBoek", leegBoek);
                 }
@@ -185,7 +185,7 @@ namespace MvcBib.Controllers
                         _db.Boeken.Add(boek);
                         _db.SaveChanges();
                         ExemplarenToevoegen(boek, aantalEx);
-                        boek.Auteurs = new HashSet<Auteur>();
+                        
                         if(boek.Auteurs.LongCount()!=0){
                             return RedirectToAction("Index", "Home");
                         }
@@ -204,12 +204,15 @@ namespace MvcBib.Controllers
                 for (int i = 0; i < aantalEx; i++)
                 {
                     Exemplaar ex = new Exemplaar { Commentaar = "ex" + (i + 1) };
-                    boek.Exemplaren = new HashSet<Exemplaar>();
+                    
                     boek.Exemplaren.Add(ex);
                     _db.SaveChanges();
                 }
             }
         }
+
+       
+
 
         protected override void Dispose(bool disposing)
         {

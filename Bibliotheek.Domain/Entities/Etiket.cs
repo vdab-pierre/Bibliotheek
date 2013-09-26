@@ -11,5 +11,9 @@ namespace Bibliotheek.Domain.Entities
         public int Id { get; set; }
         public string Tekst { get; set; }
         public virtual ICollection<Exemplaar> Exemplaren { get; set; }
+        public Etiket()
+        {
+            Exemplaren = new HashSet<Exemplaar>();
+        }
     }
 }

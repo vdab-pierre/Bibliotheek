@@ -19,6 +19,10 @@ namespace Bibliotheek.Domain.Entities
         public virtual ICollection<Auteur> Auteurs { get; set; }
         public virtual ICollection<Exemplaar> Exemplaren { get; set; }
         public virtual Uitgever Uitgever { get; set; }
-        
+        public Boek()
+        {
+            Auteurs = new HashSet<Auteur>();
+            Exemplaren = new HashSet<Exemplaar>();
+        }
     }
 }

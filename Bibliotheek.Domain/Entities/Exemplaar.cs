@@ -14,5 +14,9 @@ namespace Bibliotheek.Domain.Entities
         public string Commentaar { get; set; }
         public virtual ICollection<Uitlening> Uitleningen { get; set; }
         public virtual Etiket Etiket { get; set; }
+        public Exemplaar()
+        {
+            Uitleningen = new HashSet<Uitlening>();
+        }
     }
 }

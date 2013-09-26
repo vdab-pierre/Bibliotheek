@@ -38,16 +38,20 @@
     <div class="display-label">
             @Html.LabelFor(model => model.Auteurs)
     </div>
+    <div class="display-field">
      @if(Model.Auteurs.LongCount()>0){
-                
-                foreach (var a in Model.Auteurs) { 
-                    @Html.DisplayFor(model => a.Familienaam)
-                    @Html.DisplayFor(model => a.Voornaam)
-                }
-                
-            }else{
-                <p>Nog geen auteurs.</p>
-            }
+        <ul>
+        @foreach (var a in Model.Auteurs) { 
+            <li>
+                @Html.DisplayFor(model => a.Familienaam) 
+                @Html.DisplayFor(model => a.Voornaam)
+            </li>
+        }
+        </ul>
+        }else{
+            <p>Nog geen auteurs.</p>
+        }
+</div>
 </fieldset>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |

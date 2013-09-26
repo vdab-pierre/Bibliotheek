@@ -122,9 +122,10 @@ namespace Bibliotheek.Domain.Utility
                         }
                         else
                         {
-                            hetBoek.Auteurs = new HashSet<Auteur>();
-                            hetBoek.Auteurs.Add(new Auteur { Familienaam = famNaam, Voornaam = famNaam });
+                            Auteur nieuweAuteur = new Auteur { Familienaam = famNaam, Voornaam = voorNaam }; 
+                            hetBoek.Auteurs.Add(nieuweAuteur);
                         }
+
                     }
                     //uitgever toevoegen aan boek
                     var deUitgeverInDb = ctx.Uitgevers.Where(u => u.Naam.Contains(jsonBoekPublisherName)).FirstOrDefault();

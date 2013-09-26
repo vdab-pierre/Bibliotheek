@@ -10,7 +10,10 @@ namespace Bibliotheek.Domain.Entities
     {
         public int Id { get; set; }
         public string Naam { get; set; }
-        public string publisher_id { get; set; }
         public virtual ICollection<Boek> Boeken { get; set; }
+        public Uitgever()
+        {
+            Boeken = new HashSet<Boek>();
+        }
     }
 }

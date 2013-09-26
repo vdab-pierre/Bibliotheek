@@ -44,10 +44,7 @@ namespace MvcBib.Controllers
                 {
                     if (deAuteurInDb != null)
                     {
-                        if (boekInDb.Auteurs == null)
-                        {
-                            boekInDb.Auteurs = new HashSet<Auteur>();
-                        }
+                        
                         boekInDb.Auteurs.Add(deAuteurInDb);
                         _db.SaveChanges();
                     }

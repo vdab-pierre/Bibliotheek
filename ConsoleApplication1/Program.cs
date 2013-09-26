@@ -1,4 +1,6 @@
-﻿using Bibliotheek.Domain.Utility;
+﻿using Bibliotheek.Domain.Concrete;
+using Bibliotheek.Domain.Entities;
+using Bibliotheek.Domain.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,12 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            //var boek = WebZoekBoek.ZoekBoek("9781430241348");
+            var boek =WebZoekBoek.ZoekBoek(new Isbn { Nummer = "9780297870470" } );
+            //boek.Auteurs.Add(new Auteur { Familienaam="Joske",Voornaam="Vermeulen"});
+            //boek.Auteurs.Add(new Auteur { Familienaam = "Joske", Voornaam = "Vermeulen" });
+            foreach (Auteur a in boek.Auteurs) {
+                Console.WriteLine(string.Format("{0} {1}",a.Voornaam,a.Familienaam));
+            }
         }
     }
 }
