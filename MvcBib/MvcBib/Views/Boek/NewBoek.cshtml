@@ -53,7 +53,7 @@
                 <div id="auteurs">
                     <p>Nog geen auteurs in de db.</p>
                 </div>
-                <a href="#" onclick="addNew()">Toevoegen.</a>
+                <a id="addKnop" href="#">Toevoegen.</a>
             }
         <div class="editor-label">
             @Html.LabelFor(model => model.Uitgever)
@@ -80,9 +80,19 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
-        function addNew() {
-            $("#auteurs")
-        }
+        $(function () {
+            $("#addKnop").click(function () {
+                var newTextBoxDiv = $(document.createElement('div'));
+                newTextBoxDiv.html("<label for='textboxVoornaam'=>Voornaam:</label>"+
+                    "<input type='text' id='textboxVoornaam' />"+
+                    "<label for='textboxFamnaam'=>Familienaam:</label>"+
+                    "<input type='text' id='textboxFamnaam' />"+
+                    "<a href='# '>+</a>");
+                
+                newTextBoxDiv.appendTo("#auteurs");
+
+            })
+        });
 
 
         @*function addOrCreateAuteur() {
