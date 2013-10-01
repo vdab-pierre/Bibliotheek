@@ -17,9 +17,7 @@ namespace MvcBib.Controllers
             _db = new EFBibliotheekRepository();
         }
 
-        public ActionResult TestTooltip() {
-            return View();
-        }
+       
 
         public ActionResult Index(string searchTerm=null)
         {

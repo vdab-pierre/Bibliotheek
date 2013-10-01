@@ -39,21 +39,44 @@
         <div class="editor-label">
             @Html.LabelFor(model => model.Auteurs)
         </div>
-        
-            @if(Model.Auteurs.LongCount()>0){
-                <div id="auteurs">
-                    @foreach (var a in Model.Auteurs) { 
-                        @Html.DisplayFor(model => a.Familienaam) @:&nbsp;
-                        @Html.DisplayFor(model => a.Voornaam)
+            @if(Model!=null){
+                if(Model.Auteurs.LongCount()>0){
+                    <div id="auteurs">
+                        @foreach (var a in Model.Auteurs) { 
+                            @Html.DisplayFor(model => a.Familienaam) @:&nbsp;
+                            @Html.DisplayFor(model => a.Voornaam)
                         
-                    }
-                </div>
+                        }
+                        <br />
+                    </div>
                 
-            }else{
-                <div id="auteurs">
-                    <p>Nog geen auteurs in de db.</p>
-                </div>
-                <a id="addKnop" href="#">Toevoegen.</a>
+                }else{
+                    <div id="auteurs">
+                        <p>Nog geen auteurs in de db.</p>
+
+                        <table id="inputs">
+                            <thead>
+                                <tr>
+                                    <th>Voornaam</th>
+                                    <th>Familienaam</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input id="textboxVoornaam" type='text'/>
+                                    </td>
+                                    <td>
+                                        <input id="textboxFamilienaam" type='text'/>
+                                    </td>
+                                    <td>
+                                        <input type="button" value="+" onclick="addAuteur()" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                }
             }
         <div class="editor-label">
             @Html.LabelFor(model => model.Uitgever)
@@ -80,20 +103,25 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
-        $(function () {
-            $("#addKnop").click(function () {
-                var newTextBoxDiv = $(document.createElement('div'));
-                newTextBoxDiv.html("<label for='textboxVoornaam'=>Voornaam:</label>"+
-                    "<input type='text' id='textboxVoornaam' />"+
-                    "<label for='textboxFamnaam'=>Familienaam:</label>"+
-                    "<input type='text' id='textboxFamnaam' />"+
-                    "<a href='# '>+</a>");
-                
-                newTextBoxDiv.appendTo("#auteurs");
+        //$(function () {
+        //    $("#inputs input[type='button']").click(add)
+        //});
 
-            })
-        });
+        function addAuteur() {
+            alert('rr')
+        }
 
+        //function addRow() {
+        //    var inputs = $('#inputs').find('tbody')
+        //        .append($('<tr>').append($('<td>').append($("<input type='text'/>")))
+        //           .append($('<td>').append($("<input type='text'/>")))
+        //           .append($('<td>').append($("<input type='button' value='+' onclick='addRow()'/>"))
+        //                .append($("<input type='button' value='x' onclick='addRow()'/>")
+        //            )
+        //        )
+        //    );
+            
+        //}
 
         @*function addOrCreateAuteur() {
             var data = {

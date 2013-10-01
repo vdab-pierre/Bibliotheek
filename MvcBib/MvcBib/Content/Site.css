@@ -1,4 +1,25 @@
-﻿html {
+﻿/* voor auteurs*/
+div#auteurs{
+    background-color:aliceblue;
+    padding-left:10px;
+    margin-left:50px;
+    width:750px;
+}
+
+
+
+    table#inputs input[type='text'] {
+        font-size:1em;
+    }
+table#inputs thead tr th {
+    font-size:1em;
+    font-weight:600;
+}
+
+    
+
+
+html {
     background-color: #e2e2e2;
     margin: 0;
     padding: 0;

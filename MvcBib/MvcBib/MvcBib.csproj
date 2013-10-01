@@ -330,6 +330,7 @@
     <Content Include="Views\Boek\NewBoek.cshtml" />
     <Content Include="Views\Boek\WisAlleExemplarenVanBoek.cshtml" />
     <Content Include="Views\Auteur\CreateVoorBoek.cshtml" />
+    <Content Include="Views\Boek\NewBoek_z_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

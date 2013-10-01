@@ -19,6 +19,11 @@ namespace MvcBib.Controllers
             _db = new EFBibliotheekRepository();
         }
 
+        public ActionResult TestNewBoek()
+        {
+            return View("NewBoek_z_layout");
+        }
+
         public ActionResult Index()
         {
             return View();
