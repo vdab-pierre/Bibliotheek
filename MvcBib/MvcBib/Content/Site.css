@@ -6,6 +6,11 @@ div#auteurs{
     width:750px;
 }
 
+#addButton:disabled {
+    background-color:lightgrey;
+    border-color:gray;
+    color:gray;
+}
 
 
     table#inputs input[type='text'] {
@@ -16,7 +21,9 @@ table#inputs thead tr th {
     font-weight:600;
 }
 
+/*#addButton {
     
+}*/    
 
 
 html {

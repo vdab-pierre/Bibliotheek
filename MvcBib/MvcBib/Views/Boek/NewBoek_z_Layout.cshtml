@@ -10,7 +10,7 @@
     <title>NewBoek_z_Layout</title>
     <script src="~/Scripts/jquery-2.0.3.js"></script>
     <script src="~/Scripts/jquery-ui-1.10.3.js"></script>
-
+    <link href="~/Content/Site.css" rel="stylesheet" />
 </head>
 <body>
   
@@ -33,7 +33,7 @@
                                         <input id="textboxFamilienaam" type='text'/>
                                     </td>
                                     <td>
-                                        <input type="button" value="+" onclick="addAuteur()" />
+                                        <input id="addButton" type="button" value="+" onclick="addAuteur()" />
                                     </td>
                                 </tr>
                             </tbody>
@@ -44,7 +44,9 @@
      var auteurs = [];
      
      $(function () {
-         $("#inputs input[type='button']").attr('disabled', 'disabled');
+         $("#addButton").attr('disabled', 'disabled');
+         //werd niet gedimmed door button css rules, zie #addButton:disabled rule
+
          $('#inputs input[type="text"]').keyup(function () {
              if ($('#textboxVoornaam').val() != '' && $('#textboxFamilienaam').val() != '') {
                  $('#inputs input[type="button"]').removeAttr('disabled');
@@ -56,6 +58,13 @@
         var nieuweAuteur = { Familienaam: $('#textboxFamilienaam').val(), Voornaam: $('#textboxVoornaam').val() };
         auteurs.push(nieuweAuteur);
         addAuteurToDiv(nieuweAuteur);
+        //textboxen leegmaken
+        $('#textboxFamilienaam').val('');
+        $('#textboxVoornaam').val('');
+        //addButton disablen
+        $("#addButton").attr('disabled', 'disabled');
+
+
     }
     function test() {
         alert(auteurs.length);

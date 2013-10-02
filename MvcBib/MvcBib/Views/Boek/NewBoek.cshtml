@@ -52,8 +52,8 @@
                 
                 }else{
                     <div id="auteurs">
-                        <p>Nog geen auteurs in de db.</p>
-
+                        <div>Nog geen auteurs in de db.</div>
+                        <p>Voer Nieuwe auteur in:</p>
                         <table id="inputs">
                             <thead>
                                 <tr>
@@ -70,11 +70,12 @@
                                         <input id="textboxFamilienaam" type='text'/>
                                     </td>
                                     <td>
-                                        <input type="button" value="+" onclick="addAuteur()" />
+                                        <input id="addButton" type="button" value="+" onclick="addAuteur()" />
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
+            <input type="button" value="test" onclick="test()" />
                     </div>
                 }
             }
@@ -103,13 +104,63 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
+
+        var auteurs = [];
+
+        $(function () {
+            $("#addButton").attr('disabled', true);
+            //werd niet gedimmed door button css rules, zie #addButton:disabled rule
+            $('#inputs input[type="text"]').keyup(function () {
+                if ($('#textboxVoornaam').val() != '' && $('#textboxFamilienaam').val() != '') {
+                    $('#inputs input[type="button"]').removeAttr('disabled');
+                }
+            });
+
+        });
+        function addAuteur() {
+            var nieuweAuteur = { Familienaam: $('#textboxFamilienaam').val(), Voornaam: $('#textboxVoornaam').val() };
+
+            auteurs.push(nieuweAuteur);
+            addAuteurToDiv(nieuweAuteur);
+
+            //textboxen leegmaken
+            $('#textboxFamilienaam').val('');
+            $('#textboxVoornaam').val('');
+            //addButton disablen
+            $("#addButton").attr('disabled', 'disabled');
+
+        }
+        function test() {
+            alert(auteurs.length);
+        }
+        function addAuteurToDiv(nieuweAuteur) {
+            if (auteurs.length === 1) {
+                $('#auteurs').find('div').html('')
+                    .append($('<ul>')
+                    .append($('<li>')
+                    .append(nieuweAuteur.Voornaam + '&nbsp;' + nieuweAuteur.Familienaam))
+                );
+            } else {
+                $('#auteurs').find('div').find('ul')
+                    .append($('<li>')
+                        .append(nieuweAuteur.Voornaam + '&nbsp;' + nieuweAuteur.Familienaam)
+                    );
+            }
+
+
+        }
+
+
+
+
+
+
+
         //$(function () {
         //    $("#inputs input[type='button']").click(add)
         //});
 
-        function addAuteur() {
-            alert('rr')
-        }
+        
 
         //function addRow() {
         //    var inputs = $('#inputs').find('tbody')
