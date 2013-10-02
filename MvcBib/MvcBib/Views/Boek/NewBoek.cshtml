@@ -1,12 +1,14 @@
 ﻿@model Bibliotheek.Domain.Entities.Boek
 
+
 @{
     ViewBag.Title = "NewBoek";
 }
 
 <h2>NewBoek</h2>
 
-@using (Html.BeginForm("CreateBoekOrExemplaar","Boek",null,FormMethod.Post)) {
+@using (Html.BeginForm("CreateBoekOrExemplaar", "Boek", null, FormMethod.Post, new { id="form"}))
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
@@ -39,10 +41,13 @@
         <div class="editor-label">
             @Html.LabelFor(model => model.Auteurs)
         </div>
-            @if(Model!=null){
-                if(Model.Auteurs.LongCount()>0){
+            @if (Model != null)
+            {
+                if (Model.Auteurs.LongCount() > 0)
+                {
                     <div id="auteurs">
-                        @foreach (var a in Model.Auteurs) { 
+                        @foreach (var a in Model.Auteurs)
+                        { 
                             @Html.DisplayFor(model => a.Familienaam) @:&nbsp;
                             @Html.DisplayFor(model => a.Voornaam)
                         
@@ -50,10 +55,12 @@
                         <br />
                     </div>
                 
-                }else{
+                }
+                else
+                {
                     <div id="auteurs">
                         <div>Nog geen auteurs in de db.</div>
-                        <p>Voer Nieuwe auteur in:</p>
+                        
                         <table id="inputs">
                             <thead>
                                 <tr>
@@ -75,7 +82,6 @@
                                 </tr>
                             </tbody>
                         </table>
-            <input type="button" value="test" onclick="test()" />
                     </div>
                 }
             }
@@ -116,10 +122,29 @@
                 }
             });
 
+            $('#form').submit(function () {
+                var boek = {Titel:'Brol'};
+                var data = {
+                    Boek: boek,
+                    aantalEx: parseInt($('#aantalEx').val()),
+                    auteurs: auteurs
+                };
+                alert(JSON.stringify(data));
+                $.ajax({
+                    url: '@Url.Action("CreateBoekOrExemplaar","Boek")',
+                type: 'POST',
+                data: { "strJson": "'" + JSON.stringify(data) + "'" },
+                success: function (result) {
+                    alert(result);
+                },
+                traditional:true
+                //contentType:'application/json'
+            });
+            })
         });
-        function addAuteur() {
-            var nieuweAuteur = { Familienaam: $('#textboxFamilienaam').val(), Voornaam: $('#textboxVoornaam').val() };
 
+        function addAuteur() {
+            var nieuweAuteur = {Id:0, Familienaam: $('#textboxFamilienaam').val(), Voornaam: $('#textboxVoornaam').val(), Boeken:null };
             auteurs.push(nieuweAuteur);
             addAuteurToDiv(nieuweAuteur);
 
@@ -128,68 +153,31 @@
             $('#textboxVoornaam').val('');
             //addButton disablen
             $("#addButton").attr('disabled', 'disabled');
+        }
 
-        }
-        function test() {
-            alert(auteurs.length);
-        }
         function addAuteurToDiv(nieuweAuteur) {
             if (auteurs.length === 1) {
                 $('#auteurs').find('div').html('')
                     .append($('<ul>')
                     .append($('<li>')
-                    .append(nieuweAuteur.Voornaam + '&nbsp;' + nieuweAuteur.Familienaam))
+                    .append(nieuweAuteur.Voornaam + '&nbsp;' + nieuweAuteur.Familienaam)
+                    .append($("<input class='removeButton' type='button' value='x' onclick='removeAuteur(this)'/>"))
+                    )
                 );
             } else {
                 $('#auteurs').find('div').find('ul')
                     .append($('<li>')
                         .append(nieuweAuteur.Voornaam + '&nbsp;' + nieuweAuteur.Familienaam)
+                        .append($("<input class='removeButton' type='button' value='x' onclick='removeAuteur(this)'/>"))
                     );
             }
-
-
         }
 
+        function removeAuteur(o) {
+            var i = $(o).parent().index();
+            auteurs.splice(i, 1);
+            $(o).parent().remove();
+        }
 
-
-
-
-
-
-        //$(function () {
-        //    $("#inputs input[type='button']").click(add)
-        //});
-
-        
-
-        //function addRow() {
-        //    var inputs = $('#inputs').find('tbody')
-        //        .append($('<tr>').append($('<td>').append($("<input type='text'/>")))
-        //           .append($('<td>').append($("<input type='text'/>")))
-        //           .append($('<td>').append($("<input type='button' value='+' onclick='addRow()'/>"))
-        //                .append($("<input type='button' value='x' onclick='addRow()'/>")
-        //            )
-        //        )
-        //    );
-            
-        //}
-
-        @*function addOrCreateAuteur() {
-            var data = {
-                Boek: '@Model',
-                Voornaam: $('#Voornaam').val(),
-                FamilieNaam: $('#Familienaam').val()
-                
-            };
-            //alert(JSON.stringify(data));
-            $.ajax({
-                url: '@Url.Action("AddOrCreate","Auteur")',
-                type: 'POST',
-                data:{"strJson": "'" + JSON.stringify(data) + "'"},
-                success: function (result) {
-                    alert(result);
-                }
-            });
-        }*@
     </script>
 }

@@ -165,8 +165,9 @@ namespace MvcBib.Controllers
             return View("Create",isbn);
         }
 
-
-        public ActionResult CreateBoekOrExemplaar(Boek boek, int aantalEx) { 
+        [HttpPost]
+        public ActionResult CreateBoekOrExemplaar(Boek boek, int aantalEx, IEnumerable<Auteur> auteurs)
+        { 
             //is het boek in de db dan aantal exemplaren toevoegen
             //anders nieuw boek aanmaken
             
