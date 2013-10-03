@@ -1,4 +1,5 @@
 ﻿@model Bibliotheek.Domain.Entities.Boek
+@using Bibliotheek.Domain.Entities;
 
 
 @{
@@ -19,15 +20,14 @@
             @Html.LabelFor(model => model.Isbn.Nummer)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Isbn.Nummer)
-            @Html.ValidationMessageFor(model => model.Isbn.Nummer)
+            @Html.TextBoxFor(model => model.Isbn.Nummer, new { disabled="disabled",@readonly="readonly"})
         </div>
 
         <div class="editor-label">
             @Html.LabelFor(model => model.Titel)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Titel)
+            @Html.EditorFor(model => model.Titel, new { id="titel"})
             @Html.ValidationMessageFor(model => model.Titel)
         </div>
 
@@ -35,7 +35,7 @@
             @Html.LabelFor(model => model.Samenvatting)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Samenvatting)
+            @Html.EditorFor(model => model.Samenvatting, new { id="samenvatting"})
             @Html.ValidationMessageFor(model => model.Samenvatting)
         </div>
         <div class="editor-label">
@@ -89,7 +89,7 @@
             @Html.LabelFor(model => model.Uitgever)
         </div>
         <div class="editor-label">
-            @Html.EditorFor(model => model.Uitgever.Naam)
+            @Html.EditorFor(model => model.Uitgever.Naam, new { id="uitgever"})
             @Html.ValidationMessageFor(model => model.Uitgever.Naam)
         </div>
 
@@ -98,7 +98,7 @@
         </div>
 
         <p>
-            <input type="submit" value="Create" />
+            <input type="button" value="Create" onclick="postData()" />
         </p>
     </fieldset>
 }
@@ -121,30 +121,12 @@
                     $('#inputs input[type="button"]').removeAttr('disabled');
                 }
             });
-
-            $('#form').submit(function () {
-                var boek = {Titel:'Brol'};
-                var data = {
-                    Boek: boek,
-                    aantalEx: parseInt($('#aantalEx').val()),
-                    auteurs: auteurs
-                };
-                alert(JSON.stringify(data));
-                $.ajax({
-                    url: '@Url.Action("CreateBoekOrExemplaar","Boek")',
-                type: 'POST',
-                data: { "strJson": "'" + JSON.stringify(data) + "'" },
-                success: function (result) {
-                    alert(result);
-                },
-                traditional:true
-                //contentType:'application/json'
-            });
-            })
         });
 
+
+
         function addAuteur() {
-            var nieuweAuteur = {Id:0, Familienaam: $('#textboxFamilienaam').val(), Voornaam: $('#textboxVoornaam').val(), Boeken:null };
+            var nieuweAuteur = {Familienaam: $('#textboxFamilienaam').val(), Voornaam: $('#textboxVoornaam').val()};
             auteurs.push(nieuweAuteur);
             addAuteurToDiv(nieuweAuteur);
 
@@ -179,5 +161,35 @@
             $(o).parent().remove();
         }
 
+
+        function postData() {
+            var aantalEx = $('#aantalEx').val();
+            var titel = $('#Titel').val();
+            var samenvatting = $('#Samenvatting').val();
+            var uitgever = $('#Uitgever_Naam').val();
+            var boek = {
+                Id:0,
+                Isbn: { nummer: '@Model.Isbn.Nummer' },
+                Titel: '@Model.Titel',
+                Samenvatting: '@Model.Samenvatting',
+                Uitgever: { Naam: '@Model.Uitgever.Naam' },
+                Auteurs: auteurs
+            };
+            
+            var data = "{'jsonBoek':'"+ JSON.stringify(boek)+"','aantalEx':'"+ aantalEx +"'}";
+            alert(data);
+            @*$.ajax({ 
+                url: '@Url.Action("CreateBoekOrExemplaar","Boek")',
+                traditional:true,
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'Json',
+                async:true,
+                data: data,
+                success: function (result) {
+                    window.location = '/home/index';
+                }                
+            });*@
+        }
     </script>
 }

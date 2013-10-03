@@ -1,6 +1,7 @@
 ﻿using Bibliotheek.Domain.Concrete;
 using Bibliotheek.Domain.Entities;
 using Bibliotheek.Domain.Utility;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,7 +14,7 @@ namespace MvcBib.Controllers
     public class BoekController : Controller
     {
         private EFBibliotheekRepository _db;
-        
+
         public BoekController()
         {
             _db = new EFBibliotheekRepository();
@@ -77,32 +78,38 @@ namespace MvcBib.Controllers
 
         [HttpPost, ActionName("WisAlleExemplarenVanBoek")]
         [ValidateAntiForgeryToken]
-        public ActionResult WisAlleExemplarenVanBoekConfirmed(int id) {
+        public ActionResult WisAlleExemplarenVanBoekConfirmed(int id)
+        {
             Boek boek = _db.Boeken.Find(id);
             var exemplaren = boek.Exemplaren;
             boek.Exemplaren = null;
-            foreach(var ex in exemplaren){
+            foreach (var ex in exemplaren)
+            {
                 _db.Exemplaren.Remove(ex);
                 _db.SaveChanges();
             }
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
 
-        public ActionResult ExemplarenVanBoek(int id) {
+        public ActionResult ExemplarenVanBoek(int id)
+        {
             Boek boek = _db.Boeken.Find(id);
             return View(boek);
         }
 
-        public ActionResult WisExemplaarVanBoek(int exId) {
+        public ActionResult WisExemplaarVanBoek(int exId)
+        {
             var exemplaar = _db.Exemplaren.Find(exId);
-            if (exemplaar != null) {
+            if (exemplaar != null)
+            {
                 return View(exemplaar);
             }
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpPost,ActionName("WisExemplaarVanBoek")]
-        public ActionResult WisExemplaarVanBoekConfirmed(int exId) {
+        [HttpPost, ActionName("WisExemplaarVanBoek")]
+        public ActionResult WisExemplaarVanBoekConfirmed(int exId)
+        {
             var exemplaar = _db.Exemplaren.Find(exId);
             if (exemplaar != null)
             {
@@ -112,13 +119,14 @@ namespace MvcBib.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public ActionResult Create() { 
+        public ActionResult Create()
+        {
             //inputveld voor isbn weergeven
             return View();
         }
 
-        
-        
+
+
         public ActionResult CreateOrLookUp(Isbn isbn)
         {
             //boek bestaat in de db*
@@ -131,14 +139,15 @@ namespace MvcBib.Controllers
 
             //   niet gevonden: lege boekvelden laten invullen, # exemplaren, toevoegen
 
-            
+
             if (ModelState.IsValid)
             {
                 var boekInDb = _db.Boeken.Where(b => b.Isbn.Nummer == isbn.Nummer).FirstOrDefault();
 
                 if (boekInDb != null)
                 {
-                    return View("NewBoek", boekInDb);
+                    //boek gevonden => edit boek
+                    return RedirectToAction("Edit", "Boek", new { Id = boekInDb.Id });
                 }
                 else
                 {
@@ -154,77 +163,84 @@ namespace MvcBib.Controllers
                     //boek niet op het net gevonden
                     var leegBoek = new Boek();
                     leegBoek.Isbn = isbn;
-                    
+
                     leegBoek.Uitgever = new Uitgever();
                     return View("NewBoek", leegBoek);
                 }
             }
-        
-        
 
-            return View("Create",isbn);
+
+
+            return View("Create", isbn);
         }
 
         [HttpPost]
-        public ActionResult CreateBoekOrExemplaar(Boek boek, int aantalEx, IEnumerable<Auteur> auteurs)
-        { 
+        public ActionResult Test(string boek, int aantalEx)
+        {
+            Boek nieuwBoek = JsonConvert.DeserializeObject<Boek>(boek);
+            return Json(new { message = "ok" });
+        }
+
+        [HttpPost]
+        public ActionResult CreateBoekOrExemplaar(string jsonBoek, int aantalEx)
+        {
+
+            //boek entity maken van jsonboek
+            Boek boek = JsonConvert.DeserializeObject<Boek>(jsonBoek);
+
             //is het boek in de db dan aantal exemplaren toevoegen
             //anders nieuw boek aanmaken
-            
-            if (boek != null) {
-                var boekInDb = _db.Boeken.Where(b => b.Isbn.Nummer == boek.Isbn.Nummer).FirstOrDefault();
-                if (boekInDb != null)
+            if (boek != null)
+            {
+                //nieuw boek maken en exemplaren eraan toevoegen
+                if (ModelState.IsValid)
                 {
-                    //boek gevonden in db
-                    //exemplaren toevoegen aan bestaand boek
-                    ExemplarenToevoegen(boekInDb, aantalEx);
-                    return RedirectToAction("Index", "Home");
-                }
-                else { 
-                    //boek niet gevonden in db
-                    //nieuw boek maken en exemplaren eraan toevoegen
-                    if (ModelState.IsValid)
+                    var uitgeverInDb = _db.Uitgevers.Where(u => u.Naam.Contains(boek.Uitgever.Naam)).FirstOrDefault();
+                    if (uitgeverInDb != null)
                     {
-                        var uitgeverInDb = _db.Uitgevers.Where(u => u.Naam.Contains(boek.Uitgever.Naam)).FirstOrDefault();
-                        if (uitgeverInDb != null) {
-                            boek.Uitgever = uitgeverInDb;
-                        }
-                        _db.Boeken.Add(boek);
-                        _db.SaveChanges();
-                        ExemplarenToevoegen(boek, aantalEx);
-                        
-                        if(boek.Auteurs.LongCount()!=0){
-                            return RedirectToAction("Index", "Home");
-                        }
-                        else{
-                            return RedirectToAction("CreateVoorBoek", "Auteur", new { boekId = boek.Id });
-                        }
+                        boek.Uitgever = uitgeverInDb;
+                    }
+                    
+                    _db.Boeken.Add(boek);
+                    _db.SaveChanges();
+                    ExemplarenToevoegen(boek, aantalEx);
+
+                    if (boek.Auteurs.LongCount() != 0)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        return RedirectToAction("CreateVoorBoek", "Auteur", new { boekId = boek.Id });
                     }
                 }
             }
+
             return View();
         }
 
-        private void ExemplarenToevoegen(Boek boek, int aantalEx) {
+        private void ExemplarenToevoegen(Boek boek, int aantalEx)
+        {
             if (boek != null)
             {
                 for (int i = 0; i < aantalEx; i++)
                 {
                     Exemplaar ex = new Exemplaar { Commentaar = "ex" + (i + 1) };
-                    
+
                     boek.Exemplaren.Add(ex);
                     _db.SaveChanges();
                 }
             }
         }
 
-       
+
 
 
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            if (disposing) {
+            if (disposing)
+            {
                 _db.Dispose();
             }
         }

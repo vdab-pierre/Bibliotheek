@@ -12,7 +12,6 @@ namespace Bibliotheek.Domain.Entities
     {
         
         public int Id { get; set; }
-
         public virtual Isbn Isbn { get; set; }
         public string Titel { get; set; }
         public string Samenvatting { get; set; }
