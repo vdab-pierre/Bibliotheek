@@ -27,7 +27,7 @@
             @Html.LabelFor(model => model.Titel)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Titel, new { id="titel"})
+            @Html.EditorFor(model => model.Titel)
             @Html.ValidationMessageFor(model => model.Titel)
         </div>
 
@@ -35,7 +35,7 @@
             @Html.LabelFor(model => model.Samenvatting)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Samenvatting, new { id="samenvatting"})
+            @Html.EditorFor(model => model.Samenvatting)
             @Html.ValidationMessageFor(model => model.Samenvatting)
         </div>
         <div class="editor-label">
@@ -89,7 +89,7 @@
             @Html.LabelFor(model => model.Uitgever)
         </div>
         <div class="editor-label">
-            @Html.EditorFor(model => model.Uitgever.Naam, new { id="uitgever"})
+            @Html.EditorFor(model => model.Uitgever.Naam)
             @Html.ValidationMessageFor(model => model.Uitgever.Naam)
         </div>
 
@@ -170,15 +170,15 @@
             var boek = {
                 Id:0,
                 Isbn: { nummer: '@Model.Isbn.Nummer' },
-                Titel: '@Model.Titel',
-                Samenvatting: '@Model.Samenvatting',
-                Uitgever: { Naam: '@Model.Uitgever.Naam' },
+                Titel: titel,
+                Samenvatting: samenvatting,
+                Uitgever: { Naam: uitgever },
                 Auteurs: auteurs
             };
             
             var data = "{'jsonBoek':'"+ JSON.stringify(boek)+"','aantalEx':'"+ aantalEx +"'}";
             alert(data);
-            @*$.ajax({ 
+            $.ajax({ 
                 url: '@Url.Action("CreateBoekOrExemplaar","Boek")',
                 traditional:true,
                 type: 'POST',
@@ -189,7 +189,8 @@
                 success: function (result) {
                     window.location = '/home/index';
                 }                
-            });*@
+            });
+            return false;
         }
     </script>
 }

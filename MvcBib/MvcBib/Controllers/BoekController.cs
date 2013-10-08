@@ -182,7 +182,7 @@ namespace MvcBib.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateBoekOrExemplaar(string jsonBoek, int aantalEx)
+        public JsonResult CreateBoekOrExemplaar(string jsonBoek, int aantalEx)
         {
 
             //boek entity maken van jsonboek
@@ -204,19 +204,10 @@ namespace MvcBib.Controllers
                     _db.Boeken.Add(boek);
                     _db.SaveChanges();
                     ExemplarenToevoegen(boek, aantalEx);
-
-                    if (boek.Auteurs.LongCount() != 0)
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else
-                    {
-                        return RedirectToAction("CreateVoorBoek", "Auteur", new { boekId = boek.Id });
-                    }
                 }
             }
 
-            return View();
+            return Json(new{result="ok"});
         }
 
         private void ExemplarenToevoegen(Boek boek, int aantalEx)
