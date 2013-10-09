@@ -16,11 +16,10 @@
         @Html.HiddenFor(model => model.Id)
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Isbn)
+            @Html.LabelFor(model => model.Isbn.Nummer)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Isbn.Nummer)
-            @Html.ValidationMessageFor(model => model.Isbn)
+            @Html.TextBoxFor(model => model.Isbn.Nummer, new { disabled="disabled",@readonly="readonly"})
         </div>
 
         <div class="editor-label">
@@ -38,40 +37,157 @@
             @Html.EditorFor(model => model.Samenvatting)
             @Html.ValidationMessageFor(model => model.Samenvatting)
         </div>
-        <div class="editor-label">
-         @Html.LabelFor(model => model.Uitgever)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Uitgever.Naam)
-        </div>
+        
         <div class="editor-label">
                 @Html.LabelFor(model => model.Auteurs)
         </div>
-        <div class="editor-field">
-         @if(Model.Auteurs.LongCount()>0){
-            <ul>
-            @foreach (var a in Model.Auteurs) { 
-                <li>
-                    @Html.EditorFor(model => a.Familienaam) 
-                    @Html.EditorFor(model => a.Voornaam)
-                </li>
-            }
-            </ul>
+        <div id="auteurs">
+            @if(Model.Auteurs.LongCount()>0){
+                <ul>
+                    @foreach (var a in Model.Auteurs) {
+                        <li>
+                            @Html.EditorFor(model => a.Familienaam) 
+                            @Html.EditorFor(model => a.Voornaam)
+                        </li>
+                    }
+                </ul>
             }else{
-                <p>Nog geen auteurs.</p>
+                <div>Auteurs toevoegen:</div>
+                <table id="inputs">
+                    <thead>
+                        <tr>
+                            <th>Voornaam</th>
+                            <th>Familienaam</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input id="textboxVoornaam" type='text'/>
+                            </td>
+                            <td>
+                                <input id="textboxFamilienaam" type='text'/>
+                            </td>
+                            <td>
+                                <input id="addButton" type="button" value="+" onclick="addAuteur()" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             }
-         </div>
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Uitgever)
+        </div>
+        <div class="editor-label">
+            @Html.EditorFor(model => model.Uitgever.Naam)
+            @Html.ValidationMessageFor(model => model.Uitgever.Naam)
+        </div>
+
+        <div class="editor-field">
+            <label for="aantalEx">Exemplaren:</label>
+            @{
+                var aantalEx = Model.Exemplaren == null ? 0 : Model.Exemplaren.LongCount();
+            }
+
+            <input type="number" name="aantalEx" id="aantalEx" value="@aantalEx" />
+        </div>
 
         <p>
-            <input type="submit" value="Save" />
+            <input type="Button" value="Save" onclick="postData()" />
         </p>
     </fieldset>
-}
-
+}@*end form*@
+    
+ 
 <div>
     @Html.ActionLink("Back to List", "Index","Home")
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(function () {
+            $("#addButton").attr('disabled', true);
+            //werd niet gedimmed door button css rules, zie #addButton:disabled rule
+            $('#inputs input[type="text"]').keyup(function () {
+                if ($('#textboxVoornaam').val() != '' && $('#textboxFamilienaam').val() != '') {
+                    $('#inputs input[type="button"]').removeAttr('disabled');
+                }
+            });
+        });
+
+        var auteurs = [];
+
+        function addAuteur() {
+            var nieuweAuteur = { Familienaam: $('#textboxFamilienaam').val(), Voornaam: $('#textboxVoornaam').val() };
+            auteurs.push(nieuweAuteur);
+            addAuteurToDiv(nieuweAuteur);
+
+            //textboxen leegmaken
+            $('#textboxFamilienaam').val('');
+            $('#textboxVoornaam').val('');
+            //addButton disablen
+            $("#addButton").attr('disabled', 'disabled');
+        }
+
+        function addAuteurToDiv(nieuweAuteur) {
+            if (auteurs.length === 1) {
+                $('#auteurs').find('div').html('')
+                    .append($('<ul>')
+                    .append($('<li>')
+                    .append(nieuweAuteur.Voornaam + '&nbsp;' + nieuweAuteur.Familienaam)
+                    .append($("<input class='removeButton' type='button' value='x' onclick='removeAuteur(this)'/>"))
+                    )
+                );
+            } else {
+                $('#auteurs').find('div').find('ul')
+                    .append($('<li>')
+                        .append(nieuweAuteur.Voornaam + '&nbsp;' + nieuweAuteur.Familienaam)
+                        .append($("<input class='removeButton' type='button' value='x' onclick='removeAuteur(this)'/>"))
+                    );
+            }
+        }
+
+        function removeAuteur(o) {
+            var i = $(o).parent().index();
+            auteurs.splice(i, 1);
+            $(o).parent().remove();
+        }
+
+
+        function postData() {
+            var aantalEx = $('#aantalEx').val();
+            var titel = $('#Titel').val();
+            var samenvatting = $('#Samenvatting').val();
+            var uitgever = $('#Uitgever_Naam').val();
+            var boek = {
+                Id: '@Model.Id',
+                Isbn: { nummer: '@Model.Isbn.Nummer' },
+                Titel: titel,
+                Samenvatting: samenvatting,
+                Uitgever: { Naam: uitgever },
+                Auteurs: auteurs
+            };
+
+            var data = "{'jsonBoek':'" + JSON.stringify(boek) + "','aantalEx':'" + aantalEx + "'}";
+            alert(data);
+            $.ajax({
+                url: '@Url.Action("Edit","Boek")',
+                traditional: true,
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'Json',
+                async: true,
+                data: data,
+                success: function (result) {
+                    window.location = '/home/index';
+                }
+            });
+            return false;
+        }
+
+    </script>
 }

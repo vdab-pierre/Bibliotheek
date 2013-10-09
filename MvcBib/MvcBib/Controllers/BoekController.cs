@@ -42,15 +42,53 @@ namespace MvcBib.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Boek boek)
+        public JsonResult Edit(string jsonBoek,int aantalEx)
         {
-            if (ModelState.IsValid)
-            {
-                _db.Entry(boek).State = EntityState.Modified;
-                _db.SaveChanges();
-                return RedirectToAction("Index");
+            if (ModelState.IsValid){
+                //boek entity maken van jsonboek
+                Boek boek = JsonConvert.DeserializeObject<Boek>(jsonBoek);
+                if(boek!=null){
+                    //auteurs
+                    var auteurs = new HashSet<Auteur>();
+                    foreach (var auteur in boek.Auteurs)
+                    {
+                        auteurs.Add(CreatAuteurOrUseExisting(auteur));
+                    }
+                    boek.Auteurs = auteurs;
+
+                    //uitgever
+                    var uitgever = CreateUitgeverOrUseExisting(boek.Uitgever);
+                    boek.Uitgever = uitgever;
+                    //exemplaren
+                    var boekInDb = _db.Boeken.Where(b => b.Id == boek.Id).SingleOrDefault();
+                    long aantalExInDb = 0;
+                    if (boek != null)
+                    {
+                        aantalExInDb = boekInDb.Exemplaren.LongCount();
+                    }
+                    if (aantalExInDb < aantalEx) {
+                        ExemplarenToevoegen(boek, aantalEx-aantalExInDb);
+                    }
+                    else if (aantalEx < aantalExInDb) {
+                        ExemplarenVerwijderen(boek, aantalExInDb - aantalEx);
+                    }
+                    //boek
+                    _db.Boeken.Attach(boek);
+                    _db.Entry(boek).State = EntityState.Modified;
+                    _db.SaveChanges();
+                    
+                    
+                }    
             }
-            return View(boek);
+            
+
+            return Json(new {result="ok" });
+        }
+
+        private void ExemplarenVerwijderen(Boek boek, long aantalEx)
+        {
+            _db.Exemplaren.Remove(boek.Exemplaren.First());
+            _db.SaveChanges();
         }
 
         public ActionResult Details(int id)
@@ -155,10 +193,11 @@ namespace MvcBib.Controllers
                     // op isbndb.org zoeken
                     //niet doen in testfase
                     //var webBoek = WebZoekBoek.ZoekBoek(isbn);
-                    //if (webBoek != null) {
+                    //if (webBoek != null)
+                    //{
                     //    _db.Boeken.Add(webBoek);
                     //    _db.SaveChanges();
-                    //    return View("NewBoek",webBoek);
+                    //    return View("NewBoek", webBoek);
                     //}
                     //boek niet op het net gevonden
                     var leegBoek = new Boek();
@@ -174,13 +213,7 @@ namespace MvcBib.Controllers
             return View("Create", isbn);
         }
 
-        [HttpPost]
-        public ActionResult Test(string boek, int aantalEx)
-        {
-            Boek nieuwBoek = JsonConvert.DeserializeObject<Boek>(boek);
-            return Json(new { message = "ok" });
-        }
-
+        
         [HttpPost]
         public JsonResult CreateBoekOrExemplaar(string jsonBoek, int aantalEx)
         {
@@ -195,14 +228,19 @@ namespace MvcBib.Controllers
                 //nieuw boek maken en exemplaren eraan toevoegen
                 if (ModelState.IsValid)
                 {
-                    var uitgeverInDb = _db.Uitgevers.Where(u => u.Naam.Contains(boek.Uitgever.Naam)).FirstOrDefault();
-                    if (uitgeverInDb != null)
-                    {
-                        boek.Uitgever = uitgeverInDb;
+                    //uitgever
+                    var uitgever = CreateUitgeverOrUseExisting(boek.Uitgever);
+                    boek.Uitgever = uitgever;
+                    //auteurs
+                    var auteurs = new HashSet<Auteur>();
+                    foreach (var auteur in boek.Auteurs) {
+                        auteurs.Add(CreatAuteurOrUseExisting(auteur));
                     }
-                    
+                    boek.Auteurs = auteurs;
                     _db.Boeken.Add(boek);
                     _db.SaveChanges();
+
+                    //exemplaren
                     ExemplarenToevoegen(boek, aantalEx);
                 }
             }
@@ -210,7 +248,32 @@ namespace MvcBib.Controllers
             return Json(new{result="ok"});
         }
 
-        private void ExemplarenToevoegen(Boek boek, int aantalEx)
+        private Auteur CreatAuteurOrUseExisting(Auteur auteur)
+        {
+            var auteurInDb = _db.Auteurs.Where(a => a.Familienaam.Contains(auteur.Familienaam)&&a.Voornaam.Contains(auteur.Voornaam)).FirstOrDefault();
+            if (auteurInDb != null)
+            {
+                return auteurInDb;
+            }
+            else
+            {
+                return auteur;
+            }
+        }
+
+        private Uitgever CreateUitgeverOrUseExisting(Uitgever uitgever)
+        {
+            var uitgeverInDb = _db.Uitgevers.Where(u => u.Naam.Contains(uitgever.Naam)).FirstOrDefault();
+            if (uitgeverInDb != null)
+            {
+                return  uitgeverInDb;
+            }
+            else {
+                return uitgever;
+            }
+        }
+
+        private void ExemplarenToevoegen(Boek boek, long aantalEx)
         {
             if (boek != null)
             {

@@ -1,4 +1,5 @@
-﻿/* voor auteurs*/
+﻿/* /edit.cshtml en newBoek.cshtml*/
+/* voor auteurs*/
 div#auteurs{
     background-color:aliceblue;
     padding-left:10px;
@@ -33,10 +34,16 @@ table#inputs thead tr th {
     font-weight:600;
 }
 
+#aantalEx {
+    width:20px;
+}
 
-/*#addButton {
-    
-}*/    
+input:disabled {
+    background-color:#efeeef;
+}
+
+
+
 
 
 html {
