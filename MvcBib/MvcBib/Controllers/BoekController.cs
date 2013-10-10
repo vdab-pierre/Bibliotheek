@@ -48,40 +48,43 @@ namespace MvcBib.Controllers
                 //boek entity maken van jsonboek
                 Boek boek = JsonConvert.DeserializeObject<Boek>(jsonBoek);
                 if(boek!=null){
-                    //auteurs
-                    var auteurs = new HashSet<Auteur>();
-                    foreach (var auteur in boek.Auteurs)
-                    {
-                        auteurs.Add(CreatAuteurOrUseExisting(auteur));
-                    }
-                    boek.Auteurs = auteurs;
-
-                    //uitgever
-                    var uitgever = CreateUitgeverOrUseExisting(boek.Uitgever);
-                    boek.Uitgever = uitgever;
-                    //exemplaren
+                    
+                    
                     var boekInDb = _db.Boeken.Where(b => b.Id == boek.Id).SingleOrDefault();
-                    long aantalExInDb = 0;
-                    if (boek != null)
+                    if (boekInDb != null)
                     {
-                        aantalExInDb = boekInDb.Exemplaren.LongCount();
+                        //boekInDb updaten met gegeven waarden (! navigation properties worden niet updated)
+                        _db.Entry(boekInDb).CurrentValues.SetValues(boek);
+
+                        //nav-prop auteurs
+                        var auteurs = new HashSet<Auteur>();
+                        foreach (var auteur in boek.Auteurs)
+                        {
+                            auteurs.Add(CreatAuteurOrUseExisting(auteur));
+                        }
+                        boekInDb.Auteurs = auteurs;
+
+                        //nav-prop uitgever
+                        var uitgever = CreateUitgeverOrUseExisting(boek.Uitgever);
+                        boekInDb.Uitgever = uitgever;
+
+                        //nav-prop exemplaren
+                        long aantalExInDb = 0;
+                        {
+                            aantalExInDb = boekInDb.Exemplaren.LongCount();
+                        }
+                        if (aantalExInDb < aantalEx)
+                        {
+                            ExemplarenToevoegen(boekInDb, aantalEx - aantalExInDb);
+                        }
+                        else if (aantalEx < aantalExInDb)
+                        {
+                            ExemplarenVerwijderen(boekInDb, aantalExInDb - aantalEx);
+                        }
                     }
-                    if (aantalExInDb < aantalEx) {
-                        ExemplarenToevoegen(boek, aantalEx-aantalExInDb);
-                    }
-                    else if (aantalEx < aantalExInDb) {
-                        ExemplarenVerwijderen(boek, aantalExInDb - aantalEx);
-                    }
-                    //boek
-                    _db.Boeken.Attach(boek);
-                    _db.Entry(boek).State = EntityState.Modified;
                     _db.SaveChanges();
-                    
-                    
                 }    
             }
-            
-
             return Json(new {result="ok" });
         }
 

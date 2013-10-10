@@ -43,17 +43,20 @@
         </div>
         <div id="auteurs">
             @if(Model.Auteurs.LongCount()>0){
-                <ul>
-                    @foreach (var a in Model.Auteurs) {
-                        <li>
-                            @Html.EditorFor(model => a.Familienaam) 
-                            @Html.EditorFor(model => a.Voornaam)
-                        </li>
-                    }
-                </ul>
+                <div>
+                    <ul>
+                        @foreach (var a in Model.Auteurs) {
+                            <li>
+                                @a.Voornaam @a.Familienaam <input class="removeButton" type="button" onclick="removeAuteur(this)" value="x">
+                            </li>
+                        }
+                    </ul>
+                </div>
+                
             }else{
                 <div>Auteurs toevoegen:</div>
-                <table id="inputs">
+            }
+            <table id="inputs">
                     <thead>
                         <tr>
                             <th>Voornaam</th>
@@ -74,8 +77,8 @@
                         </tr>
                     </tbody>
                 </table>
-            }
         </div>
+
 
         <div class="editor-label">
             @Html.LabelFor(model => model.Uitgever)
@@ -118,9 +121,18 @@
                 }
             });
         });
-
         var auteurs = [];
-
+        @{  var auteursVanBoek = from a in Model.Auteurs
+                                 select new{
+                                    Voornaam=a.Voornaam,
+                                    Familienaam = a.Familienaam
+                                 };
+            if(Model.Auteurs!=null || Model.Auteurs.LongCount()!=0){
+                @:auteurs = @Html.Raw(Json.Encode(auteursVanBoek))
+            }            
+        }
+        
+        
         function addAuteur() {
             var nieuweAuteur = { Familienaam: $('#textboxFamilienaam').val(), Voornaam: $('#textboxVoornaam').val() };
             auteurs.push(nieuweAuteur);
