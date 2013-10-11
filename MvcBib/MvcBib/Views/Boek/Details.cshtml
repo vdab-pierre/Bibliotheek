@@ -51,10 +51,16 @@
         }else{
             <p>Nog geen auteurs.</p>
         }
-</div>
+    </div>
+    <div class="display-label">
+        <label>Aantal exemplaren</label>
+    </div>
+    <div class="display-field">
+        @(Model.Exemplaren==null?"0":Model.Exemplaren.LongCount().ToString())
+    </div>
 </fieldset>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
-    @Html.ActionLink("Exemplaren", "ExemplarenVanBoek", new { id=Model.Id }) |
+    @*@Html.ActionLink("Exemplaren", "ExemplarenVanBoek", new { id=Model.Id }) |*@
     @Html.ActionLink("Back to List", "Index","Home")
 </p>
