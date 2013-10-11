@@ -53,19 +53,22 @@ namespace MvcBib.Controllers
                     var boekInDb = _db.Boeken.Where(b => b.Id == boek.Id).SingleOrDefault();
                     if (boekInDb != null)
                     {
+                        // de auteurs laden
+                        _db.Entry(boekInDb).Collection(b => b.Auteurs).Load();
                         //boekInDb updaten met gegeven waarden (! navigation properties worden niet updated)
                         _db.Entry(boekInDb).CurrentValues.SetValues(boek);
 
                         //nav-prop auteurs
-                        var auteurs = new HashSet<Auteur>();
+                        boekInDb.Auteurs.Clear();
                         foreach (var auteur in boek.Auteurs)
                         {
-                            auteurs.Add(CreatAuteurOrUseExisting(auteur));
+                            boekInDb.Auteurs.Add(NewAuteurOrUseExisting(auteur));
                         }
-                        boekInDb.Auteurs = auteurs;
+
+                        //boekInDb.Auteurs = auteurs;
 
                         //nav-prop uitgever
-                        var uitgever = CreateUitgeverOrUseExisting(boek.Uitgever);
+                        var uitgever = NewUitgeverOrUseExisting(boek.Uitgever);
                         boekInDb.Uitgever = uitgever;
 
                         //nav-prop exemplaren
@@ -82,6 +85,8 @@ namespace MvcBib.Controllers
                             ExemplarenVerwijderen(boekInDb, aantalExInDb - aantalEx);
                         }
                     }
+                    
+                    _db.Entry(boekInDb).State = EntityState.Modified;
                     _db.SaveChanges();
                 }    
             }
@@ -232,12 +237,12 @@ namespace MvcBib.Controllers
                 if (ModelState.IsValid)
                 {
                     //uitgever
-                    var uitgever = CreateUitgeverOrUseExisting(boek.Uitgever);
+                    var uitgever = NewUitgeverOrUseExisting(boek.Uitgever);
                     boek.Uitgever = uitgever;
                     //auteurs
                     var auteurs = new HashSet<Auteur>();
                     foreach (var auteur in boek.Auteurs) {
-                        auteurs.Add(CreatAuteurOrUseExisting(auteur));
+                        auteurs.Add(NewAuteurOrUseExisting(auteur));
                     }
                     boek.Auteurs = auteurs;
                     _db.Boeken.Add(boek);
@@ -251,7 +256,7 @@ namespace MvcBib.Controllers
             return Json(new{result="ok"});
         }
 
-        private Auteur CreatAuteurOrUseExisting(Auteur auteur)
+        private Auteur NewAuteurOrUseExisting(Auteur auteur)
         {
             var auteurInDb = _db.Auteurs.Where(a => a.Familienaam.Contains(auteur.Familienaam)&&a.Voornaam.Contains(auteur.Voornaam)).FirstOrDefault();
             if (auteurInDb != null)
@@ -260,11 +265,13 @@ namespace MvcBib.Controllers
             }
             else
             {
+                _db.Auteurs.Add(auteur);
+                _db.SaveChanges();
                 return auteur;
             }
         }
 
-        private Uitgever CreateUitgeverOrUseExisting(Uitgever uitgever)
+        private Uitgever NewUitgeverOrUseExisting(Uitgever uitgever)
         {
             var uitgeverInDb = _db.Uitgevers.Where(u => u.Naam.Contains(uitgever.Naam)).FirstOrDefault();
             if (uitgeverInDb != null)

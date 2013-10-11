@@ -42,45 +42,28 @@
             @Html.LabelFor(model => model.Auteurs)
         </div>
         <div id="auteurs">
-            @if (Model != null)
-            {
-                if (Model.Auteurs.LongCount() > 0)
-                {
-                    foreach (var a in Model.Auteurs)
-                    { 
-                        @Html.DisplayFor(model => a.Familienaam) @:&nbsp;
-                        @Html.DisplayFor(model => a.Voornaam)
-                        
-                    }
-                    <br />
-                }
-                else
-                {
-                    <div>Auteurs toevoegen:</div>
-                        
-                    <table id="inputs">
-                        <thead>
-                            <tr>
-                                <th>Voornaam</th>
-                                <th>Familienaam</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <input id="textboxVoornaam" type='text'/>
-                                </td>
-                                <td>
-                                    <input id="textboxFamilienaam" type='text'/>
-                                </td>
-                                <td>
-                                    <input id="addButton" type="button" value="+" onclick="addAuteur()" />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                }
-            }
+            <div>Auteurs toevoegen:</div>        
+                <table id="inputs">
+                    <thead>
+                        <tr>
+                            <th>Voornaam</th>
+                            <th>Familienaam</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input id="textboxVoornaam" type='text'/>
+                            </td>
+                            <td>
+                                <input id="textboxFamilienaam" type='text'/>
+                            </td>
+                            <td>
+                                <input id="addButton" type="button" value="+" onclick="addAuteur()" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
         </div>
         <div class="editor-label">
             @Html.LabelFor(model => model.Uitgever)
