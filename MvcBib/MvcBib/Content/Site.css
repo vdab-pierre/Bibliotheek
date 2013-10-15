@@ -6,12 +6,12 @@ div#auteurs{
     margin-left:50px;
     width:750px;
 }
-div#exemplaren {
+/*div#exemplaren {
     background-color:aliceblue;
     padding-left:10px;
     margin-left:50px;
     width:750px;
-}
+}*/
 
 #auteurs div ul {
     list-style:none;
