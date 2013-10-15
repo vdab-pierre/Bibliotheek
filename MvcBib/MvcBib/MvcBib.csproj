@@ -191,9 +191,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AuteurController.cs" />
     <Compile Include="Controllers\BoekController.cs" />
-    <Compile Include="Controllers\BrolController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
+    <Compile Include="Filters\CustomAuthorizeFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -337,6 +336,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\DarwinSecurity\DarwinSecurity.csproj">
+      <Project>{51736a4f-e038-4f11-99e0-8927624df255}</Project>
+      <Name>DarwinSecurity</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

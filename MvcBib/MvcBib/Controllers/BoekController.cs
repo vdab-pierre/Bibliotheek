@@ -8,6 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MvcBib.Filters;
 
 namespace MvcBib.Controllers
 {
@@ -30,6 +31,7 @@ namespace MvcBib.Controllers
             return View();
         }
 
+        [CustomAuthorizeFilter]
         public ActionResult Edit(int id)
         {
             var boek = _db.Boeken.Find(id);
@@ -42,6 +44,7 @@ namespace MvcBib.Controllers
         }
 
         [HttpPost]
+        [CustomAuthorizeFilter]
         public JsonResult Edit(string jsonBoek,int aantalEx)
         {
             if (ModelState.IsValid){
@@ -111,6 +114,7 @@ namespace MvcBib.Controllers
 
         }
 
+        [CustomAuthorizeFilter]
         public ActionResult WisAlleExemplarenVanBoek(int id)
         {
             var boek = _db.Boeken.Find(id);
@@ -122,6 +126,7 @@ namespace MvcBib.Controllers
             return RedirectToAction("Index");
         }
 
+        [CustomAuthorizeFilter]
         [HttpPost, ActionName("WisAlleExemplarenVanBoek")]
         [ValidateAntiForgeryToken]
         public ActionResult WisAlleExemplarenVanBoekConfirmed(int id)
@@ -137,34 +142,35 @@ namespace MvcBib.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public ActionResult ExemplarenVanBoek(int id)
-        {
-            Boek boek = _db.Boeken.Find(id);
-            return View(boek);
-        }
+        //public ActionResult ExemplarenVanBoek(int id)
+        //{
+        //    Boek boek = _db.Boeken.Find(id);
+        //    return View(boek);
+        //}
 
-        public ActionResult WisExemplaarVanBoek(int exId)
-        {
-            var exemplaar = _db.Exemplaren.Find(exId);
-            if (exemplaar != null)
-            {
-                return View(exemplaar);
-            }
-            return RedirectToAction("Index", "Home");
-        }
+        //public ActionResult WisExemplaarVanBoek(int exId)
+        //{
+        //    var exemplaar = _db.Exemplaren.Find(exId);
+        //    if (exemplaar != null)
+        //    {
+        //        return View(exemplaar);
+        //    }
+        //    return RedirectToAction("Index", "Home");
+        //}
 
-        [HttpPost, ActionName("WisExemplaarVanBoek")]
-        public ActionResult WisExemplaarVanBoekConfirmed(int exId)
-        {
-            var exemplaar = _db.Exemplaren.Find(exId);
-            if (exemplaar != null)
-            {
-                _db.Exemplaren.Remove(exemplaar);
-                _db.SaveChanges();
-            }
-            return RedirectToAction("Index", "Home");
-        }
+        //[HttpPost, ActionName("WisExemplaarVanBoek")]
+        //public ActionResult WisExemplaarVanBoekConfirmed(int exId)
+        //{
+        //    var exemplaar = _db.Exemplaren.Find(exId);
+        //    if (exemplaar != null)
+        //    {
+        //        _db.Exemplaren.Remove(exemplaar);
+        //        _db.SaveChanges();
+        //    }
+        //    return RedirectToAction("Index", "Home");
+        //}
 
+        [CustomAuthorizeFilter]
         public ActionResult Create()
         {
             //inputveld voor isbn weergeven
@@ -172,7 +178,7 @@ namespace MvcBib.Controllers
         }
 
 
-
+        [CustomAuthorizeFilter]
         public ActionResult CreateOrLookUp(Isbn isbn)
         {
             //boek bestaat in de db*
@@ -200,13 +206,13 @@ namespace MvcBib.Controllers
                     //boek bestaat niet in db
                     // op isbndb.org zoeken
                     //niet doen in testfase
-                    //var webBoek = WebZoekBoek.ZoekBoek(isbn);
-                    //if (webBoek != null)
-                    //{
-                    //    _db.Boeken.Add(webBoek);
-                    //    _db.SaveChanges();
-                    //    return View("NewBoek", webBoek);
-                    //}
+                    var webBoek = WebZoekBoek.ZoekBoek(isbn);
+                    if (webBoek != null)
+                    {
+                        _db.Boeken.Add(webBoek);
+                        _db.SaveChanges();
+                        return View("Edit", webBoek);
+                    }
                     //boek niet op het net gevonden
                     var leegBoek = new Boek();
                     leegBoek.Isbn = isbn;
@@ -215,17 +221,13 @@ namespace MvcBib.Controllers
                     return View("NewBoek", leegBoek);
                 }
             }
-
-
-
             return View("Create", isbn);
         }
 
-        
+        //[CustomAuthorizeFilter]
         [HttpPost]
         public JsonResult CreateBoekOrExemplaar(string jsonBoek, int aantalEx)
         {
-
             //boek entity maken van jsonboek
             Boek boek = JsonConvert.DeserializeObject<Boek>(jsonBoek);
 
@@ -252,7 +254,6 @@ namespace MvcBib.Controllers
                     ExemplarenToevoegen(boek, aantalEx);
                 }
             }
-
             return Json(new{result="ok"});
         }
 
@@ -296,9 +297,6 @@ namespace MvcBib.Controllers
                 }
             }
         }
-
-
-
 
         protected override void Dispose(bool disposing)
         {
