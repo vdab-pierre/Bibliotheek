@@ -4,7 +4,11 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<form method="get">
+    <input type="search" name="searchTerm" />
+    <input type="submit" value="Zoek" title="Typ hier een string dat kan voorkomen in een boektitel, beginletters van naam of voornaam van de auteur, beginletters van de naam van de uitgever of begin van het isbn"/>
+
+</form>
 
 <p>
     @Html.ActionLink("Voeg boek toe", "Create","Boek")

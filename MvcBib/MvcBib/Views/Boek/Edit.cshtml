@@ -47,7 +47,7 @@
                     <ul>
                         @foreach (var a in Model.Auteurs) {
                             <li>
-                                @a.Voornaam @a.Familienaam <input class="removeButton" type="button" onclick="removeAuteur(this)" value="x">
+                                @a.Voornaam @a.Familienaam <a href="#" onclick="removeAuteur(this)">Delete</a>
                             </li>
                         }
                     </ul>
@@ -57,44 +57,50 @@
                 <div>Auteurs toevoegen:</div>
             }
             <table id="inputs">
-                    <thead>
-                        <tr>
-                            <th>Voornaam</th>
-                            <th>Familienaam</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <input id="textboxVoornaam" type='text'/>
-                            </td>
-                            <td>
-                                <input id="textboxFamilienaam" type='text'/>
-                            </td>
-                            <td>
-                                <input id="addButton" type="button" value="+" onclick="addAuteur()" />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <thead>
+                    <tr>
+                        <th>Voornaam</th>
+                        <th>Familienaam</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input id="textboxVoornaam" type='text'/>
+                        </td>
+                        <td>
+                            <input id="textboxFamilienaam" type='text'/>
+                        </td>
+                        <td>
+                            <input id="addButton" type="button" value="+" onclick="addAuteur()" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
 
         <div class="editor-label">
             @Html.LabelFor(model => model.Uitgever)
         </div>
-        <div class="editor-label">
+        <div class="editor-field">
             @Html.EditorFor(model => model.Uitgever.Naam)
             @Html.ValidationMessageFor(model => model.Uitgever.Naam)
         </div>
-
-        <div class="editor-field">
+        <div class="editor-label">
             <label for="aantalEx">Exemplaren:</label>
+        </div>
+        <div id="exemplaren" class="editor-field">
+            
             @{
                 var aantalEx = Model.Exemplaren == null ? 0 : Model.Exemplaren.LongCount();
             }
 
             <input type="number" name="aantalEx" id="aantalEx" value="@aantalEx" />
+
+            @*@Html.Partial("_ExemplarenVanBoek",Model)*@
+
+
         </div>
 
         <p>
@@ -120,6 +126,7 @@
                     $('#inputs input[type="button"]').removeAttr('disabled');
                 }
             });
+
         });
         var auteurs = [];
         @{  var auteursVanBoek = from a in Model.Auteurs
@@ -151,14 +158,16 @@
                     .append($('<ul>')
                     .append($('<li>')
                     .append(nieuweAuteur.Voornaam + '&nbsp;' + nieuweAuteur.Familienaam)
-                    .append($("<input class='removeButton' type='button' value='x' onclick='removeAuteur(this)'/>"))
+                    .append($("<a href='#' onClick='removeAuteur(this)'>Delete</a>"))
+                    //.append($("<input class='removeButton' type='button' value='x' onclick='removeAuteur(this)'/>"))
                     )
                 );
             } else {
                 $('#auteurs').find('div').find('ul')
                     .append($('<li>')
                         .append(nieuweAuteur.Voornaam + '&nbsp;' + nieuweAuteur.Familienaam)
-                        .append($("<input class='removeButton' type='button' value='x' onclick='removeAuteur(this)'/>"))
+                        .append($("<a href='#' onClick='removeAuteur(this)'>Delete</a>"))
+                        //.append($("<input class='removeButton' type='button' value='x' onclick='removeAuteur(this)'/>"))
                     );
             }
         }
@@ -169,6 +178,10 @@
             $(o).parent().remove();
         }
 
+        function removeExemplaar(exId) {
+            alert(exId);
+            $.post("/Boek/WisExemplaarVanBoek", { exId: exId }, function (result) { location.reload();});
+        }
 
         function postData() {
             var aantalEx = $('#aantalEx').val();

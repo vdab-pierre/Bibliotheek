@@ -1,0 +1,33 @@
+﻿@model Bibliotheek.Domain.Entities.Boek
+@if(Model.Exemplaren.LongCount()>0){
+    <div>
+        <ul>
+            @foreach(var ex in Model.Exemplaren){
+                <li>@ex.Druk @ex.Commentaar <a href="#" onclick="removeExemplaar(@ex.Id)">Delete</a></li>
+            }
+        </ul>
+    </div>
+}else{
+    <div>Exemplaar toevoegen:</div>
+}
+<table id="inputs">
+    <thead>
+        <tr>
+            <th>Druk</th>
+            <th>Commentaar</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <input id="textboxDruk" type='text'/>
+            </td>
+            <td>
+                <input id="textboxCommentaar" type='text'/>
+            </td>
+            <td>
+                <input id="addButton" type="button" value="+" onclick="addAuteur()" />
+            </td>
+        </tr>
+    </tbody>
+</table>

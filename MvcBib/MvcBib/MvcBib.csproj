@@ -324,7 +324,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\_BoekLijst.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Boek\ExemplarenVanBoek.cshtml" />
+    <Content Include="Views\Shared\_ExemplarenVanBoek.cshtml" />
     <Content Include="Views\Boek\WisExemplaarVanBoek.cshtml" />
     <Content Include="Views\Boek\Create.cshtml" />
     <Content Include="Views\Boek\NewBoek.cshtml" />
