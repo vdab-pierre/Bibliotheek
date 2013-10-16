@@ -19,23 +19,27 @@ namespace MvcBib.Controllers
 
         public ActionResult Index(string searchTerm=null)
         {
-            var boeken = (from b in _db.Boeken
-                          from a in b.Auteurs
-                          where
-                          searchTerm == null
-                          || a.Familienaam.StartsWith(searchTerm)
-                          || a.Voornaam.StartsWith(searchTerm)
-                          || b.Titel.Contains(searchTerm)
-                          || b.Isbn.Nummer.StartsWith(searchTerm)
-                          || b.Uitgever.Naam.StartsWith(searchTerm)
-                          select b).GroupBy(b=>b.Id)
-                          .Select(g=>g.FirstOrDefault())                          
-                          .ToList();
+            try
+            {
+                var boeken = (from b in _db.Boeken
+                              from a in b.Auteurs
+                              where
+                              searchTerm == null
+                              || a.Familienaam.StartsWith(searchTerm)
+                              || a.Voornaam.StartsWith(searchTerm)
+                              || b.Titel.Contains(searchTerm)
+                              || b.Isbn.Nummer.StartsWith(searchTerm)
+                              || b.Uitgever.Naam.StartsWith(searchTerm)
+                              select b).GroupBy(b => b.Id)
+                              .Select(g => g.FirstOrDefault())
+                              .ToList();
 
-            //nog geen searchTerm
-            //var boeken = _db.Boeken.ToList();
-
-            return View(boeken);
+                //nog geen searchTerm
+                //var boeken = _db.Boeken.ToList();
+                return View(boeken);
+            }
+            catch {return new HttpException }
+            
         }
 
         protected override void Dispose(bool disposing)

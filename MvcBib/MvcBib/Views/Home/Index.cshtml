@@ -5,14 +5,15 @@
 }
 
 <form method="get">
-    <input type="search" name="searchTerm" />
+    <input id="zoekVak" type="search" name="searchTerm" />
     <input type="submit" value="Zoek" title="Typ hier een string dat kan voorkomen in een boektitel, beginletters van naam of voornaam van de auteur, beginletters van de naam van de uitgever of begin van het isbn"/>
-
+    @Html.ActionLink("Alles weergeven","Index")
 </form>
-
+@if(Session["login"]!=null){
 <p>
     @Html.ActionLink("Voeg boek toe", "Create","Boek")
 </p>
+}
 <table>
     <tr>
         <th>
@@ -35,14 +36,23 @@
         </td>
         
         <td>
-            @Html.ActionLink("Edit", "Edit","Boek", new { id=item.Id },null) |
+            @if(Session["login"]!=null){
+                @Html.ActionLink("Edit", "Edit","Boek", new { id=item.Id },null) @:|
+            }
             @Html.ActionLink("Details", "Details","Boek", new { id=item.Id },null)
-            @if(item.Exemplaren.Count()!=0){
+            @if(Session["login"]!=null && item.Exemplaren.Count()!=0){
                 @:|
                 @Html.ActionLink("Wis alle exemplaren", "WisAlleExemplarenVanBoek","Boek", new { id=item.Id },null)
             }
         </td>
     </tr>
 }
-
 </table>
+@section scripts{
+    <script>
+        $(function(){
+            $("#zoekVak").tooltip();
+            $("#zoekVak").focus();
+        });
+    </script>
+}

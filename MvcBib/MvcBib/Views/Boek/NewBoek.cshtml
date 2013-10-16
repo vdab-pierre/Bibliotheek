@@ -145,9 +145,9 @@
 
         function postData() {
             var aantalEx = $('#aantalEx').val();
-            var titel = $('#Titel').val();
-            var samenvatting = $('#Samenvatting').val();
-            var uitgever = $('#Uitgever_Naam').val();
+            var titel = $('#Titel').val().replace(/'/g, " ");
+            var samenvatting = $('#Samenvatting').val().replace(/'/g, " ");
+            var uitgever = $('#Uitgever_Naam').val().replace(/'/g, " ");
             var boek = {
                 Id:0,
                 Isbn: { nummer: '@Model.Isbn.Nummer' },

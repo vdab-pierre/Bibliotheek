@@ -187,9 +187,9 @@
         function postData() {
 
             var aantalEx = $('#aantalEx').val();
-            var titel = $('#Titel').val().replace("'", " ");
-            var samenvatting = $('#Samenvatting').val().replace("'", " ");
-            var uitgever = $('#Uitgever_Naam').val().replace("'", " ");
+            var titel = $('#Titel').val().replace(/'/g, " ");
+            var samenvatting = $('#Samenvatting').val().replace(/'/g, " ");
+            var uitgever = $('#Uitgever_Naam').val().replace(/'/g, " ");
             
             var boek = {
                 Id: '@Model.Id',
