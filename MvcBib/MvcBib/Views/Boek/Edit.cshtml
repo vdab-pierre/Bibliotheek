@@ -185,10 +185,12 @@
         }
 
         function postData() {
+
             var aantalEx = $('#aantalEx').val();
-            var titel = $('#Titel').val();
-            var samenvatting = $('#Samenvatting').val();
-            var uitgever = $('#Uitgever_Naam').val();
+            var titel = $('#Titel').val().replace("'", " ");
+            var samenvatting = $('#Samenvatting').val().replace("'", " ");
+            var uitgever = $('#Uitgever_Naam').val().replace("'", " ");
+            
             var boek = {
                 Id: '@Model.Id',
                 Isbn: { nummer: '@Model.Isbn.Nummer' },
@@ -197,11 +199,15 @@
                 Uitgever: { Naam: uitgever },
                 Auteurs: auteurs
             };
-
+            
+            //var data = JSON.stringify(boek);
+            //var data = '{"jsonBoek":' + JSON.stringify(boek) + ',"aantalEx":"' + aantalEx + '"}';
             var data = "{'jsonBoek':'" + JSON.stringify(boek) + "','aantalEx':'" + aantalEx + "'}";
-            //alert(data);
+            alert(data);
+            //return false;
+            
             $.ajax({
-                url: '@Url.Action("Edit","Boek")',
+                url: '/Boek/Edit',
                 traditional: true,
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',

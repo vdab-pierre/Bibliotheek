@@ -45,14 +45,16 @@ namespace MvcBib.Controllers
 
         [HttpPost]
         [CustomAuthorizeFilter]
-        public JsonResult Edit(string jsonBoek,int aantalEx)
+        public JsonResult Edit(string jsonBoek, int aantalEx)
         {
-            if (ModelState.IsValid){
+            if (ModelState.IsValid)
+            {
                 //boek entity maken van jsonboek
                 Boek boek = JsonConvert.DeserializeObject<Boek>(jsonBoek);
-                if(boek!=null){
-                    
-                    
+                if (boek != null)
+                {
+
+
                     var boekInDb = _db.Boeken.Where(b => b.Id == boek.Id).SingleOrDefault();
                     if (boekInDb != null)
                     {
@@ -88,12 +90,12 @@ namespace MvcBib.Controllers
                             ExemplarenVerwijderen(boekInDb, aantalExInDb - aantalEx);
                         }
                     }
-                    
+
                     _db.Entry(boekInDb).State = EntityState.Modified;
                     _db.SaveChanges();
-                }    
+                }
             }
-            return Json(new {result="ok" });
+            return Json(new { result = "ok" });
         }
 
         private void ExemplarenVerwijderen(Boek boek, long aantalEx)
