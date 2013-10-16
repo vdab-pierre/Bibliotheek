@@ -14,6 +14,7 @@ namespace Bibliotheek.Domain.Entities
         public int Id { get; set; }
         public virtual Isbn Isbn { get; set; }
         public string Titel { get; set; }
+        [DataType(DataType.MultilineText)]
         public string Samenvatting { get; set; }
         public virtual ICollection<Auteur> Auteurs { get; set; }
         public virtual ICollection<Exemplaar> Exemplaren { get; set; }
