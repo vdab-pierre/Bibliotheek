@@ -1,8 +1,10 @@
 ﻿using Bibliotheek.Domain.Concrete;
 using Bibliotheek.Domain.Entities;
+using MvcBib.Filters;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -17,10 +19,12 @@ namespace MvcBib.Controllers
             _db = new EFBibliotheekRepository();
         }
 
+        [CustomHandleError]
         public ActionResult Index(string searchTerm=null)
         {
             try
             {
+                
                 var boeken = (from b in _db.Boeken
                               from a in b.Auteurs
                               where
@@ -31,14 +35,17 @@ namespace MvcBib.Controllers
                               || b.Isbn.Nummer.StartsWith(searchTerm)
                               || b.Uitgever.Naam.StartsWith(searchTerm)
                               select b).GroupBy(b => b.Id)
-                              .Select(g => g.FirstOrDefault())
-                              .ToList();
+                                .Select(g => g.FirstOrDefault())
+                                .ToList();
 
                 //nog geen searchTerm
                 //var boeken = _db.Boeken.ToList();
                 return View(boeken);
             }
-            catch {return new HttpException }
+            catch (DataException) {
+                throw new Exception("Er is een probleem met de database.");
+            }
+            
             
         }
 

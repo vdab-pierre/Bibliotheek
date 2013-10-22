@@ -208,6 +208,7 @@ namespace MvcBib.Controllers
                     //boek bestaat niet in db
                     // op isbndb.org zoeken
                     //niet doen in testfase
+                    
                     var webBoek = WebZoekBoek.ZoekBoek(isbn);
                     if (webBoek != null)
                     {
@@ -215,12 +216,17 @@ namespace MvcBib.Controllers
                         _db.SaveChanges();
                         return View("Edit", webBoek);
                     }
-                    //boek niet op het net gevonden
-                    var leegBoek = new Boek();
-                    leegBoek.Isbn = isbn;
+                    else
+                    {
+                        //boek niet op het net gevonden
+                        var leegBoek = new Boek();
+                        leegBoek.Isbn = isbn;
 
-                    leegBoek.Uitgever = new Uitgever();
-                    return View("NewBoek", leegBoek);
+                        leegBoek.Uitgever = new Uitgever();
+                        return View("NewBoek", leegBoek);
+                    }
+                    
+                    
                 }
             }
             return View("Create", isbn);
