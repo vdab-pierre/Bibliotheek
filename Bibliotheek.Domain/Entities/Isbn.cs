@@ -12,7 +12,8 @@ namespace Bibliotheek.Domain.Entities
     {
         [Key,ForeignKey("Boek")]
         public int Id { get; set; }
-        [IsIsbn]
+        [IsIsbn(ErrorMessage="Tik of scan een correct isbn.")]
+        [Required(ErrorMessage="Isbn moet ingevuld worden.")]
         public string Nummer { get; set; }
         public virtual Boek Boek { get; set; }
     }

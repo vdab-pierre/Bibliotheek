@@ -8,6 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MvcBib.Filters;
 
 namespace MvcBib.Controllers
 {
@@ -20,7 +21,8 @@ namespace MvcBib.Controllers
             _db = new EFBibliotheekRepository();
         }
 
-
+        [CustomHandleError]
+        [CustomAuthorize]
         public ActionResult CreateVoorBoek(int boekId) {
             var boekInDb = _db.Boeken.Find(boekId);
             if (boekInDb != null){
@@ -35,6 +37,8 @@ namespace MvcBib.Controllers
         }
 
         [HttpPost]
+        [CustomHandleError]
+        [CustomAuthorize]
         public ActionResult CreateVoorBoek(BoekAuteurViewModel vm) {
             if (ModelState.IsValid) {
                 //eerst zoeken in db ...

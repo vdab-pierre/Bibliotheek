@@ -6,7 +6,7 @@
     ViewBag.Title = "NewBoek";
 }
 
-<h2>NewBoek</h2>
+<p>@ViewBag.Bericht</p>
 
 @using (Html.BeginForm("CreateBoekOrExemplaar", "Boek", null, FormMethod.Post, new { id="form"}))
 {
@@ -74,7 +74,7 @@
         </div>
 
         <div class="editor-field">
-            <label for="aantalEx">Aantal exemplaren:</label><input type="number" name="aantalEx" id="aantalEx" />
+            <label for="aantalEx">Aantal exemplaren:</label><input type="number" min="0" name="aantalEx" id="aantalEx" />
         </div>
 
         <p>
@@ -101,7 +101,12 @@
                     $('#inputs input[type="button"]').removeAttr('disabled');
                 }
             });
-            $("#aantalEx").spinner();
+            $("#aantalEx").spinner(
+                {
+                    min: 0,
+                    max: 99
+                }
+                );
         });
 
 

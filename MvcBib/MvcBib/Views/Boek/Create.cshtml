@@ -10,7 +10,8 @@
     @Html.ValidationSummary(true)
 
     <label for="Nummer">Tik of scan een isbn:</label>
-    @Html.EditorFor(m=>m.Nummer)
+    @Html.TextBoxFor(m => m.Nummer, new {type="number" })
+    @Html.ValidationMessageFor(m=>m.Nummer)
 
     @*<label>Tik of scan een isbn: <input type="text" name="isbn" /></label>*@
     <input type="submit" value="Create" />

@@ -7,7 +7,7 @@ using System.Web.Routing;
 
 namespace MvcBib.Filters
 {
-    public class CustomAuthorizeFilter:AuthorizeAttribute
+    public class CustomAuthorizeAttribute:AuthorizeAttribute
     {
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {

@@ -22,8 +22,8 @@ namespace MvcBib.Controllers
         [CustomHandleError]
         public ActionResult Index(string searchTerm=null)
         {
-            try
-            {
+            //try
+            //{
                 
                 var boeken = (from b in _db.Boeken
                               from a in b.Auteurs
@@ -41,10 +41,10 @@ namespace MvcBib.Controllers
                 //nog geen searchTerm
                 //var boeken = _db.Boeken.ToList();
                 return View(boeken);
-            }
-            catch (DataException) {
-                throw new Exception("Er is een probleem met de database.");
-            }
+            //}
+            //catch (DataException) {
+            //    throw new Exception("Er is een probleem met de database.");
+            //}
             
             
         }

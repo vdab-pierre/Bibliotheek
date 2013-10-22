@@ -9,6 +9,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MvcBib.Filters;
+using System.Net;
 
 namespace MvcBib.Controllers
 {
@@ -21,30 +22,23 @@ namespace MvcBib.Controllers
             _db = new EFBibliotheekRepository();
         }
 
-        public ActionResult TestNewBoek()
-        {
-            return View("NewBoek_z_layout");
-        }
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        [CustomAuthorizeFilter]
+        [CustomAuthorize]
+        [CustomHandleError]
         public ActionResult Edit(int id)
         {
             var boek = _db.Boeken.Find(id);
+            
             if (boek != null)
             {
                 return View(boek);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index","Home");
         }
 
         [HttpPost]
-        [CustomAuthorizeFilter]
+        [CustomAuthorize]
+        [CustomHandleError]
         public JsonResult Edit(string jsonBoek, int aantalEx)
         {
             if (ModelState.IsValid)
@@ -77,10 +71,9 @@ namespace MvcBib.Controllers
                         boekInDb.Uitgever = uitgever;
 
                         //nav-prop exemplaren
-                        long aantalExInDb = 0;
-                        {
-                            aantalExInDb = boekInDb.Exemplaren.LongCount();
-                        }
+                        
+                        long aantalExInDb = boekInDb.Exemplaren.LongCount();
+                        
                         if (aantalExInDb < aantalEx)
                         {
                             ExemplarenToevoegen(boekInDb, aantalEx - aantalExInDb);
@@ -98,12 +91,17 @@ namespace MvcBib.Controllers
             return Json(new { result = "ok" });
         }
 
+        [CustomHandleError]
         private void ExemplarenVerwijderen(Boek boek, long aantalEx)
         {
-            _db.Exemplaren.Remove(boek.Exemplaren.First());
-            _db.SaveChanges();
+            for (int i = 0; i < aantalEx; i++)
+            {
+                _db.Exemplaren.Remove(boek.Exemplaren.First());
+                _db.SaveChanges();
+            }
         }
 
+        [CustomHandleError]
         public ActionResult Details(int id)
         {
             var boek = _db.Boeken.Where(b => b.Id == id).SingleOrDefault();
@@ -116,7 +114,8 @@ namespace MvcBib.Controllers
 
         }
 
-        [CustomAuthorizeFilter]
+        [CustomAuthorize]
+        [CustomHandleError]
         public ActionResult WisAlleExemplarenVanBoek(int id)
         {
             var boek = _db.Boeken.Find(id);
@@ -128,7 +127,8 @@ namespace MvcBib.Controllers
             return RedirectToAction("Index");
         }
 
-        [CustomAuthorizeFilter]
+        [CustomAuthorize]
+        [CustomHandleError]
         [HttpPost, ActionName("WisAlleExemplarenVanBoek")]
         [ValidateAntiForgeryToken]
         public ActionResult WisAlleExemplarenVanBoekConfirmed(int id)
@@ -172,7 +172,8 @@ namespace MvcBib.Controllers
         //    return RedirectToAction("Index", "Home");
         //}
 
-        [CustomAuthorizeFilter]
+        [CustomAuthorize]
+        [CustomHandleError]
         public ActionResult Create()
         {
             //inputveld voor isbn weergeven
@@ -180,7 +181,8 @@ namespace MvcBib.Controllers
         }
 
 
-        [CustomAuthorizeFilter]
+        [CustomAuthorize]
+        [CustomHandleError]
         public ActionResult CreateOrLookUp(Isbn isbn)
         {
             //boek bestaat in de db*
@@ -208,21 +210,31 @@ namespace MvcBib.Controllers
                     //boek bestaat niet in db
                     // op isbndb.org zoeken
                     //niet doen in testfase
-                    
-                    var webBoek = WebZoekBoek.ZoekBoek(isbn);
-                    if (webBoek != null)
+                    try
                     {
-                        _db.Boeken.Add(webBoek);
-                        _db.SaveChanges();
-                        return View("Edit", webBoek);
+                        var webBoek = WebZoekBoek.ZoekBoek(isbn);
+                        if (webBoek != null)
+                        {
+                            _db.Boeken.Add(webBoek);
+                            _db.SaveChanges();
+                            ViewBag.Bericht = "Dit boek werd op het internet gevonden.";
+                            return View("Edit", webBoek);
+                        }
+                        else
+                        {
+                            //boek niet op het net gevonden
+                            var leegBoek = new Boek();
+                            leegBoek.Isbn = isbn;
+                            //leegBoek.Uitgever = new Uitgever();
+                            ViewBag.Bericht = "Dit boek werd niet op het internet gevonden.";
+                            return View("NewBoek", leegBoek);
+                        }
                     }
-                    else
-                    {
-                        //boek niet op het net gevonden
+                    catch (WebException) {
                         var leegBoek = new Boek();
                         leegBoek.Isbn = isbn;
-
-                        leegBoek.Uitgever = new Uitgever();
+                        //leegBoek.Uitgever = new Uitgever();
+                        ViewBag.Bericht = "De applicatie kan niet op het internet gaan zoeken.";
                         return View("NewBoek", leegBoek);
                     }
                     
@@ -232,7 +244,8 @@ namespace MvcBib.Controllers
             return View("Create", isbn);
         }
 
-        //[CustomAuthorizeFilter]
+        [CustomAuthorize]
+        [CustomHandleError]
         [HttpPost]
         public JsonResult CreateBoekOrExemplaar(string jsonBoek, int aantalEx)
         {

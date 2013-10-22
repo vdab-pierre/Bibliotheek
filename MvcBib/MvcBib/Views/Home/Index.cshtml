@@ -14,6 +14,7 @@
     @Html.ActionLink("Voeg boek toe", "Create","Boek")
 </p>
 }
+@if(Model.LongCount()>0){
 <table>
     <tr>
         <th>
@@ -48,6 +49,9 @@
     </tr>
 }
 </table>
+}else{
+    <p>Geen boek gevonden.</p>
+}
 @section scripts{
     <script>
         $(function(){

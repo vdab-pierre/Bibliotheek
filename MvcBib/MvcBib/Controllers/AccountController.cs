@@ -11,6 +11,7 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 
 using MvcBib.Models;
+using MvcBib.Filters;
 
 namespace MvcBib.Controllers
 {
@@ -31,6 +32,7 @@ namespace MvcBib.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [CustomHandleError]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
             if (ModelState.IsValid && DarwinSecurity.DarwinSecurityHelper.Login(model.UserName, model.Password)) {

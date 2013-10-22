@@ -10,11 +10,11 @@ namespace MvcBib.Models
 {
     public class LoginModel
     {
-        [Required]
+        [Required(ErrorMessage="GebruikersNaam moet ingevuld worden.")]
         [Display(Name = "Gebruikersnaam")]
         public string UserName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Wachtwoord moet ingevuld worden.")]
         [DataType(DataType.Password)]
         [Display(Name = "Wachtwoord")]
         public string Password { get; set; }

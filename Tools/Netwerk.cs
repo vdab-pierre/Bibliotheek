@@ -18,7 +18,7 @@ namespace Tools
             {
                 reply = ping.Send(host);
             }
-            catch(/*catch the specific exception(s) here*/)
+            catch
             {
                 return false;
             }

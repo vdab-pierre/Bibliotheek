@@ -4,7 +4,7 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<p>@ViewBag.Bericht</p>
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -127,7 +127,12 @@
                     $('#inputs input[type="button"]').removeAttr('disabled');
                 }
             });
-            $("#aantalEx").spinner();
+            $("#aantalEx").spinner(
+                {
+                    min: 0,
+                    max: 99
+                }
+                );
         });
         var auteurs = [];
         @{  var auteursVanBoek = from a in Model.Auteurs
@@ -203,7 +208,7 @@
             //var data = JSON.stringify(boek);
             //var data = '{"jsonBoek":' + JSON.stringify(boek) + ',"aantalEx":"' + aantalEx + '"}';
             var data = "{'jsonBoek':'" + JSON.stringify(boek) + "','aantalEx':'" + aantalEx + "'}";
-            alert(data);
+            //alert(data);
             //return false;
             
             $.ajax({
