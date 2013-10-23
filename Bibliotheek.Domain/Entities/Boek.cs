@@ -13,6 +13,7 @@ namespace Bibliotheek.Domain.Entities
         
         public int Id { get; set; }
         public virtual Isbn Isbn { get; set; }
+        [Required(ErrorMessage="Titel moet ingevuld worden.")]
         public string Titel { get; set; }
         [DataType(DataType.MultilineText)]
         public string Samenvatting { get; set; }
