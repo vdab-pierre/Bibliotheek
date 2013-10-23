@@ -60,7 +60,9 @@
     </div>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @if(Session["login"]!=null){
+        @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) @:|
+    }
     @*@Html.ActionLink("Exemplaren", "ExemplarenVanBoek", new { id=Model.Id }) |*@
     @Html.ActionLink("Back to List", "Index","Home")
 </p>

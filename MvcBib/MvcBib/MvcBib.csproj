@@ -306,8 +306,6 @@
     <Content Include="Images\orderedList9.png" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Boek\Details.cshtml" />
     <Content Include="Views\Boek\Edit.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
