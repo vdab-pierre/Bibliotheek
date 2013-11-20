@@ -63,6 +63,10 @@
     <Compile Include="Migrations\201310231235234_titel_required.Designer.cs">
       <DependentUpon>201310231235234_titel_required.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201311060724217_test2.cs" />
+    <Compile Include="Migrations\201311060724217_test2.Designer.cs">
+      <DependentUpon>201311060724217_test2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\WebZoekBoek.cs" />
@@ -86,6 +90,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201310231235234_titel_required.resx">
       <DependentUpon>201310231235234_titel_required.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311060724217_test2.resx">
+      <DependentUpon>201311060724217_test2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
