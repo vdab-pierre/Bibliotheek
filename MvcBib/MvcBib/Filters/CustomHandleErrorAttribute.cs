@@ -13,7 +13,7 @@ namespace MvcBib.Filters
         public override void OnException(ExceptionContext filterContext)
         {
             //file halen uit config
-            WriteLog(Path.Combine(HttpContext.Current.Server.MapPath("~/App_Data"), "log.txt"), filterContext.Exception.ToString());
+            WriteLog(Path.Combine(HttpContext.Current.Server.MapPath("~/Logs"), "log.txt"), filterContext.Exception.ToString());
         }
 
         private void WriteLog(string logFile, string message)
