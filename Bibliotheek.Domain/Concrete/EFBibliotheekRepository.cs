@@ -13,7 +13,7 @@ namespace Bibliotheek.Domain.Concrete
     public class EFBibliotheekRepository:DbContext,IBibliotheekRepository
     {
         public EFBibliotheekRepository()
-            :base("name=LocalDb_Bib30")
+            :base("name=Bib30")
         {
 
         }
